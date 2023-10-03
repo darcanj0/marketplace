@@ -1,3 +1,5 @@
+import 'package:clothing/pages/products_page.dart';
+import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,10 +13,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 214, 75, 33)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: ProductsPage(),
+      routes: {
+        AppRoutes.home.name: (context) => MyHomePage(title: 'Home'),
+        AppRoutes.productDetails.name: (context) => ProductsPage()
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }
