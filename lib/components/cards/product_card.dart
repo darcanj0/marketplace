@@ -11,7 +11,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Product product = Provider.of<Product>(context);
+    final Product product = Provider.of<Product>(context, listen: false);
 
     void selectProduct() {
       Navigator.of(context)
@@ -48,14 +48,16 @@ class ProductCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              child: IconButton(
-                onPressed: product.toggleFavorite,
-                icon: Icon(
-                  product.isFavorite
-                      ? Icons.favorite
-                      : Icons.favorite_border_outlined,
-                  size: iconSize,
-                  color: colorScheme.primary,
+              child: Consumer<Product>(
+                builder: (context, value, child) => IconButton(
+                  onPressed: value.toggleFavorite,
+                  icon: Icon(
+                    value.isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border_outlined,
+                    size: iconSize,
+                    color: colorScheme.primary,
+                  ),
                 ),
               ),
             ),
