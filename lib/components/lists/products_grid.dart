@@ -20,8 +20,10 @@ class ProductsGrid extends StatelessWidget {
           crossAxisSpacing: 5,
           mainAxisSpacing: 10,
         ),
-        itemBuilder: (ctx, index) => ChangeNotifierProvider(
-            create: (_) => value.products[index], child: const ProductCard()),
+        itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
+          value: value.products[index],
+          child: const ProductCard(),
+        ),
       ),
     );
   }
