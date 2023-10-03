@@ -15,13 +15,13 @@ class ProductsPage extends StatelessWidget {
         title: const Text('My Store'),
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(5),
         itemCount: mockedProducts.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 15,
+          childAspectRatio: 3 / 2.5,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 10,
         ),
         itemBuilder: (ctx, index) =>
             ProductCard(product: mockedProducts[index]),
