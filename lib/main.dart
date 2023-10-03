@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ProductsProvider())],
+      providers: [ChangeNotifierProvider(create: (_) => ProductListProvider())],
       child: const MyApp(),
     ),
   );

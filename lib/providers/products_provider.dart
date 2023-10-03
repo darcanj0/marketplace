@@ -1,7 +1,7 @@
 import 'package:clothing/model/product.dart';
 import 'package:flutter/foundation.dart';
 
-class ProductsProvider with ChangeNotifier, DiagnosticableTreeMixin {
+class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
   final List<Product> _products = mockProducts;
 
   List<Product> get products => [..._products];

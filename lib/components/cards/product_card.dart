@@ -1,19 +1,18 @@
+import 'package:clothing/model/product.dart';
 import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-
-import '../../model/product.dart';
+import 'package:provider/provider.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
-    required this.product,
   });
-
-  final Product product;
   static const double iconSize = 20;
 
   @override
   Widget build(BuildContext context) {
+    final Product product = Provider.of<Product>(context);
+
     void selectProduct() {
       Navigator.of(context)
           .pushNamed(AppRoutes.productDetails.name, arguments: product);
@@ -50,9 +49,11 @@ class ProductCard extends StatelessWidget {
             ),
             Positioned(
               child: IconButton(
-                onPressed: () {},
+                onPressed: product.toggleFavorite,
                 icon: Icon(
-                  Icons.favorite_border_outlined,
+                  product.isFavorite
+                      ? Icons.favorite
+                      : Icons.favorite_border_outlined,
                   size: iconSize,
                   color: colorScheme.primary,
                 ),
