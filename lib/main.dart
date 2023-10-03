@@ -1,10 +1,18 @@
+import 'package:clothing/pages/product_details_page.dart';
 import 'package:clothing/pages/products_page.dart';
+import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ProductsProvider())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,10 +38,10 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.nunitoTextTheme(originalTextTheme),
         useMaterial3: true,
       ),
-      home: ProductsPage(),
+      home: const ProductsPage(),
       routes: {
         AppRoutes.home.name: (context) => ProductsPage(),
-        AppRoutes.productDetails.name: (context) => ProductsPage()
+        AppRoutes.productDetails.name: (context) => const ProductDetailsPage()
       },
       debugShowCheckedModeBanner: false,
     );

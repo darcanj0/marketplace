@@ -1,3 +1,4 @@
+import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/product.dart';
@@ -13,44 +14,52 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void selectProduct() {
+      Navigator.of(context)
+          .pushNamed(AppRoutes.productDetails.name, arguments: product);
+    }
+
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
     final TextTheme textTheme = theme.textTheme;
     return ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(8)),
-      child: GridTile(
-        footer: GridTileBar(
-          title: Text(
-            product.title,
-            style: textTheme.labelSmall,
-          ),
-          trailing: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.shopping_cart,
-              size: iconSize,
+      child: InkWell(
+        onTap: () => selectProduct(),
+        child: GridTile(
+          footer: GridTileBar(
+            backgroundColor: colorScheme.primary.withOpacity(.7),
+            title: Text(
+              product.title,
+              style: textTheme.labelSmall,
             ),
-          ),
-          backgroundColor: colorScheme.primary.withOpacity(.65),
-        ),
-        child: Stack(children: [
-          Positioned.fill(
-            child: Image.network(
-              product.imageUrl,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            child: IconButton(
+            trailing: IconButton(
               onPressed: () {},
-              icon: Icon(
-                Icons.favorite_border_outlined,
+              icon: const Icon(
+                Icons.shopping_cart,
                 size: iconSize,
-                color: colorScheme.primary,
               ),
             ),
           ),
-        ]),
+          child: Stack(children: [
+            Positioned.fill(
+              child: Ink.image(
+                image: NetworkImage(product.imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.favorite_border_outlined,
+                  size: iconSize,
+                  color: colorScheme.primary,
+                ),
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }
