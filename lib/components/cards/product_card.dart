@@ -1,3 +1,4 @@
+import 'package:clothing/model/cart.dart';
 import 'package:clothing/model/product.dart';
 import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Cart cart = Provider.of<Cart>(context, listen: true);
     final Product product = Provider.of<Product>(context, listen: false);
 
     void selectProduct() {
@@ -30,10 +32,12 @@ class ProductCard extends StatelessWidget {
             backgroundColor: colorScheme.primary.withOpacity(.7),
             title: Text(
               product.title,
-              style: textTheme.labelSmall,
+              style: textTheme.labelMedium,
             ),
             trailing: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                cart.addProduct(product);
+              },
               icon: const Icon(
                 Icons.shopping_cart,
                 size: iconSize,

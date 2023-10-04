@@ -4,7 +4,7 @@ import 'package:clothing/model/product.dart';
 import 'package:flutter/material.dart';
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items;
+  Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items => {..._items};
 
@@ -18,7 +18,7 @@ class Cart with ChangeNotifier {
 
   void addProduct(Product product) {
     if (items.containsKey(product.id)) {
-      items.update(
+      _items.update(
         product.id,
         (value) => CartItem(
           id: value.id,
@@ -29,7 +29,7 @@ class Cart with ChangeNotifier {
         ),
       );
     } else {
-      items.putIfAbsent(
+      _items.putIfAbsent(
         product.id,
         () => CartItem(
           id: Random().nextDouble().toString(),
@@ -40,6 +40,7 @@ class Cart with ChangeNotifier {
         ),
       );
     }
+    print(_items);
     notifyListeners();
   }
 
@@ -53,7 +54,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  Cart({required Map<String, CartItem> items}) : _items = items;
+  Cart();
 }
 
 class CartItem {
