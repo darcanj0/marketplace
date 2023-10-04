@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const ProductsPage(),
       routes: {
-        AppRoutes.home.name: (context) => ProductsPage(),
+        AppRoutes.home.name: (context) => const ProductsPage(),
         AppRoutes.productDetails.name: (context) => const ProductDetailsPage()
       },
       debugShowCheckedModeBanner: false,

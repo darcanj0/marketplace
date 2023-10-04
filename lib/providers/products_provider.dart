@@ -6,6 +6,9 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   List<Product> get products => [..._products];
 
+  List<Product> get favoriteProducts =>
+      [..._products.where((element) => element.isFavorite)];
+
   void addProduct(Product product) {
     bool invalidId = _products.any((element) => element.id == product.id);
     if (invalidId) return;
