@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
-      seedColor: Color.fromARGB(255, 236, 99, 57),
+      seedColor: const Color.fromARGB(255, 236, 99, 57),
     );
 
     final TextTheme originalTextTheme = Theme.of(context).textTheme.copyWith(
