@@ -8,9 +8,6 @@ class AppDrawer extends StatelessWidget {
     Navigator.of(context).pushReplacementNamed(route.name);
   }
 
-  void navigateToManageProducts(BuildContext context) =>
-      Navigator.of(context).pushNamed(AppRoutes.manageProducts.name);
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -33,7 +30,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.edit_rounded),
             title: const Text('Manage Products'),
-            onTap: () => navigateToManageProducts(context),
+            onTap: () => navigateToReplacing(context, AppRoutes.manageProducts),
           )
         ],
       ),
