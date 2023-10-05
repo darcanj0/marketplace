@@ -24,6 +24,7 @@ class Cart with ChangeNotifier {
           id: value.id,
           productId: value.productId,
           productTitle: value.productTitle,
+          imageUrl: product.imageUrl,
           price: value.price,
           quantity: value.quantity + 1,
         ),
@@ -36,6 +37,7 @@ class Cart with ChangeNotifier {
           productId: product.id,
           productTitle: product.title,
           price: product.price,
+          imageUrl: product.imageUrl,
           quantity: 1,
         ),
       );
@@ -62,12 +64,15 @@ class CartItem {
   final String productId;
   final String productTitle;
   final double price;
+  final String imageUrl;
   int quantity;
 
-  CartItem(
-      {required this.id,
-      required this.productId,
-      required this.productTitle,
-      required this.price,
-      required this.quantity});
+  CartItem({
+    required this.id,
+    required this.productId,
+    required this.productTitle,
+    required this.price,
+    required this.imageUrl,
+    required this.quantity,
+  });
 }
