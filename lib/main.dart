@@ -1,4 +1,5 @@
 import 'package:clothing/model/cart.dart';
+import 'package:clothing/model/order.dart';
 import 'package:clothing/pages/cart_page.dart';
 import 'package:clothing/pages/product_details_page.dart';
 import 'package:clothing/pages/products_page.dart';
@@ -13,9 +14,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProductListProvider()),
-        ChangeNotifierProvider(
-          create: (_) => Cart(),
-        )
+        ChangeNotifierProvider(create: (_) => Cart()),
+        ChangeNotifierProvider(create: (_) => OrderList())
       ],
       child: const MyApp(),
     ),
