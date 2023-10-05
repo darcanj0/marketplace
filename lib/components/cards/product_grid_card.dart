@@ -38,7 +38,7 @@ class ProductGridCard extends StatelessWidget {
               onPressed: () {
                 cart.addProduct(product);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: const Text('Added Red Shirt to Cart'),
+                  content: Text('Added ${product.title} to Cart'),
                   duration: const Duration(seconds: 3),
                   action: SnackBarAction(
                     label: 'UNDO',

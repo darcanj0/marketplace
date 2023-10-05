@@ -8,14 +8,14 @@ import 'package:badges/badges.dart' as badges;
 
 enum Filters { all, favorites }
 
-class ProductsPage extends StatefulWidget {
-  const ProductsPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<ProductsPage> createState() => _ProductsPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _ProductsPageState extends State<ProductsPage> {
+class _HomePageState extends State<HomePage> {
   bool showFavoritesOnly = false;
 
   void navigateToCart() => Navigator.of(context).pushNamed(AppRoutes.cart.name);

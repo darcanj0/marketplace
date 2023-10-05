@@ -1,9 +1,9 @@
-import 'package:clothing/components/cards/cart_item_card.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../components/cards/cart_total_card.dart';
+import '../components/lists/cart_items_list.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -28,16 +28,7 @@ class CartPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (ctx, index) {
-                  final CartItem item = items[index];
-                  return CartItemCard(
-                    cartItem: item,
-                    key: Key(item.productId),
-                  );
-                },
-              ),
+              child: CartItemsList(items: items),
             ),
           ],
         );

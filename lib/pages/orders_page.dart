@@ -1,8 +1,9 @@
-import 'package:clothing/components/cards/order_card.dart';
 import 'package:clothing/components/nav/app_drawer.dart';
 import 'package:clothing/model/order.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../components/lists/orders_list.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
@@ -13,10 +14,9 @@ class OrdersPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Orders'),
       ),
-      body: Consumer<OrderList>(builder: (ctx, orderList, child) {
-        return ListView.builder(
-          itemCount: orderList.ordersCount,
-          itemBuilder: (_, index) => OrderCard(order: orderList.orders[index]),
+      body: Consumer<OrderList>(builder: (ctx, orderListProvider, child) {
+        return OrdersList(
+          orderListProvider: orderListProvider,
         );
       }),
       drawer: const AppDrawer(),

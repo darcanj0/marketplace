@@ -1,8 +1,9 @@
-import 'package:clothing/components/cards/manage_product_card.dart';
 import 'package:clothing/components/nav/app_drawer.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../components/lists/manage_product_list.dart';
 
 class ManageProductsPage extends StatelessWidget {
   const ManageProductsPage({super.key});
@@ -21,15 +22,7 @@ class ManageProductsPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
         child: Consumer<ProductListProvider>(
           builder: (context, productList, child) {
-            return ListView.builder(
-              itemBuilder: (ctx, index) => Column(
-                children: [
-                  ManageProductCard(product: productList.products[index]),
-                  Divider()
-                ],
-              ),
-              itemCount: productList.products.length,
-            );
+            return ManageProductList(productList: productList,);
           },
         ),
       ),
