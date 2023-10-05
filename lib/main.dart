@@ -27,10 +27,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
-      seedColor: Color.fromARGB(255, 252, 121, 33),
+      seedColor: const Color.fromARGB(255, 252, 121, 33),
     );
 
     final TextTheme originalTextTheme = Theme.of(context).textTheme.copyWith(
+        headlineMedium: TextStyle(
+          color: colorScheme.onBackground,
+          fontSize: 32,
+        ),
         headlineSmall: TextStyle(
           color: colorScheme.onBackground,
           fontSize: 20,
