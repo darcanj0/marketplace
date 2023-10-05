@@ -15,6 +15,21 @@ class CartItemCard extends StatelessWidget {
 
     return Dismissible(
       key: Key(cartItem.id),
+      confirmDismiss: (_) => showDialog<bool>(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: const Text('Are you sure?'),
+                content: const Text('Do you want to remove this product?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: const Text('YES'),
+                  ),
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('NO'))
+                ],
+              )),
       direction: DismissDirection.endToStart,
       background: Container(
         padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -26,8 +41,7 @@ class CartItemCard extends StatelessWidget {
           size: 30,
         ),
       ),
-      onDismissed: (_) =>
-          cart.removeProduct(cartItem.productId),
+      onDismissed: (_) => cart.removeProduct(cartItem.productId),
       child: Card(
         elevation: 2,
         margin: const EdgeInsets.all(4),
