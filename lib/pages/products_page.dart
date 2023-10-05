@@ -1,3 +1,4 @@
+import 'package:clothing/components/nav/app_drawer.dart';
 import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -71,6 +72,7 @@ class _ProductsPageState extends State<ProductsPage> {
           child: const Icon(Icons.shopping_cart),
         ),
       ),
+      drawer: const AppDrawer(),
     );
   }
 }

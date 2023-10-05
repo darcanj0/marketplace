@@ -25,7 +25,6 @@ class CartPage extends StatelessWidget {
             CartTotalCard(
               colorScheme: colorScheme,
               textTheme: textTheme,
-              cartTotal: cart.totalPrice,
             ),
             const SizedBox(height: 20),
             Expanded(

@@ -1,18 +1,19 @@
+import 'package:clothing/model/order.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../model/cart.dart';
 
 class CartTotalCard extends StatelessWidget {
   const CartTotalCard(
-      {super.key,
-      required this.colorScheme,
-      required this.textTheme,
-      required this.cartTotal});
+      {super.key, required this.colorScheme, required this.textTheme});
 
   final ColorScheme colorScheme;
   final TextTheme textTheme;
-  final double cartTotal;
 
   @override
   Widget build(BuildContext context) {
+    final Cart cart = Provider.of<Cart>(context);
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
@@ -38,7 +39,7 @@ class CartTotalCard extends StatelessWidget {
               backgroundColor: colorScheme.background,
               label: FittedBox(
                 child: Text(
-                  'U\$ ${cartTotal.toStringAsFixed(2)}',
+                  'U\$ ${cart.totalPrice}',
                   style: textTheme.labelLarge,
                 ),
               ),
@@ -47,7 +48,12 @@ class CartTotalCard extends StatelessWidget {
             Flexible(
               flex: 1,
               child: TextButton(
-                onPressed: () {},
+                onPressed: cart.itemsCount == 0
+                    ? null
+                    : () {
+                        context.read<OrderList>().addOrder(cart);
+                        cart.emptyCart();
+                      },
                 child: FittedBox(
                   child: Text(
                     'Checkout',
