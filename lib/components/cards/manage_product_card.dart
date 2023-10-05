@@ -16,7 +16,7 @@ class ManageProductCard extends StatelessWidget {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       child: ListTile(
         leading: CircleAvatar(
           radius: reduceIcons ? 20 : 40,

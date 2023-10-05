@@ -22,8 +22,12 @@ class ManageProductsPage extends StatelessWidget {
         child: Consumer<ProductListProvider>(
           builder: (context, productList, child) {
             return ListView.builder(
-              itemBuilder: (ctx, index) =>
+              itemBuilder: (ctx, index) => Column(
+                children: [
                   ManageProductCard(product: productList.products[index]),
+                  Divider()
+                ],
+              ),
               itemCount: productList.products.length,
             );
           },
