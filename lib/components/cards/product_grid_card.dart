@@ -4,8 +4,8 @@ import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProductCard extends StatelessWidget {
-  const ProductCard({
+class ProductGridCard extends StatelessWidget {
+  const ProductGridCard({
     super.key,
   });
   static const double iconSize = 20;
@@ -37,6 +37,14 @@ class ProductCard extends StatelessWidget {
             trailing: IconButton(
               onPressed: () {
                 cart.addProduct(product);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: const Text('Added Red Shirt to Cart'),
+                  duration: const Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: 'UNDO',
+                    onPressed: () => cart.removeOneItem(product.id),
+                  ),
+                ));
               },
               icon: const Icon(
                 Icons.shopping_cart,

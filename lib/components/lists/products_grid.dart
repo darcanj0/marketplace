@@ -2,7 +2,7 @@ import 'package:clothing/model/product.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../cards/product_card.dart';
+import '../cards/product_grid_card.dart';
 
 class ProductsGrid extends StatelessWidget {
   const ProductsGrid({
@@ -30,7 +30,7 @@ class ProductsGrid extends StatelessWidget {
       itemBuilder: (ctx, index) {
         return ChangeNotifierProvider.value(
           value: loadedProducts[index],
-          child: ProductCard(key: Key(loadedProducts[index].id)),
+          child: ProductGridCard(key: Key(loadedProducts[index].id)),
         );
       },
     );
