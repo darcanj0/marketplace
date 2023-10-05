@@ -35,7 +35,7 @@ class CartPage extends StatelessWidget {
                   final CartItem item = items[index];
                   return CartItemCard(
                     cartItem: item,
-                    key: Key(item.id),
+                    key: Key(item.productId),
                   );
                 },
               ),
