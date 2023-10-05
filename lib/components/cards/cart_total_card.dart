@@ -39,7 +39,7 @@ class CartTotalCard extends StatelessWidget {
               backgroundColor: colorScheme.background,
               label: FittedBox(
                 child: Text(
-                  'U\$ ${cart.totalPrice}',
+                  'U\$ ${cart.totalPrice.toStringAsFixed(2)}',
                   style: textTheme.labelLarge,
                 ),
               ),
