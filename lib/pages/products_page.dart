@@ -30,9 +30,20 @@ class _ProductsPageState extends State<ProductsPage> {
         actions: [
           PopupMenuButton(
             itemBuilder: (ctx) => [
-              const PopupMenuItem(value: Filters.all, child: Text('Show all')),
-              const PopupMenuItem(
-                  value: Filters.favorites, child: Text('Show Favorites only')),
+              PopupMenuItem(
+                value: Filters.all,
+                child: Text(
+                  'Show all',
+                  style: textTheme.bodyMedium,
+                ),
+              ),
+              PopupMenuItem(
+                value: Filters.favorites,
+                child: Text(
+                  'Show Favorites only',
+                  style: textTheme.bodyMedium,
+                ),
+              ),
             ],
             onSelected: (value) {
               switch (value) {

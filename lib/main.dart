@@ -27,10 +27,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 236, 99, 57),
+      seedColor: Color.fromARGB(255, 252, 121, 33),
     );
 
     final TextTheme originalTextTheme = Theme.of(context).textTheme.copyWith(
+        headlineSmall: TextStyle(
+          color: colorScheme.onBackground,
+          fontSize: 20,
+        ),
+        labelLarge: TextStyle(
+          color: colorScheme.onBackground,
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+        ),
         labelMedium: TextStyle(
           color: colorScheme.onPrimary,
           fontWeight: FontWeight.bold,
@@ -40,6 +49,11 @@ class MyApp extends StatelessWidget {
           color: colorScheme.onPrimary,
           fontWeight: FontWeight.bold,
           fontSize: 12,
+        ),
+        bodyMedium: TextStyle(
+          color: colorScheme.onBackground,
+          fontWeight: FontWeight.normal,
+          fontSize: 15,
         ));
 
     return MaterialApp(
