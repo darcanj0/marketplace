@@ -1,4 +1,5 @@
 import 'package:clothing/providers/products_provider.dart';
+import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,11 @@ class ManageProductCard extends StatelessWidget {
   const ManageProductCard({required this.product, super.key});
 
   final Product product;
+
+  void editProduct(BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(AppRoutes.productForm.name, arguments: product);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,7 @@ class ManageProductCard extends StatelessWidget {
           child: Row(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => editProduct(context),
                 iconSize: reduceIcons ? 15 : 20,
                 icon: const Icon(Icons.edit),
               ),

@@ -1,4 +1,5 @@
 import 'package:clothing/helpers/string_validation.dart';
+import 'package:clothing/model/product.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,22 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final arg = ModalRoute.of(context)?.settings.arguments;
+    if (arg != null) {
+      final productToEdit = arg as Product;
+      formData['id'] = productToEdit.id;
+      formData['title'] = productToEdit.title;
+      formData['price'] = productToEdit.price.toString();
+      formData['imageUrl'] = productToEdit.imageUrl;
+      formData['description'] = productToEdit.description;
+
+      imageUrlController.text = productToEdit.imageUrl;
+    }
+  }
+
+  @override
   void dispose() {
     priceFocus.dispose();
     descriptionFocus.dispose();
@@ -41,7 +58,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     final FormState? formState = formKey.currentState;
     if (formState!.validate()) {
       formState.save();
-      context.read<ProductListProvider>().addProductFromData(formData);
+      context.read<ProductListProvider>().saveProductFromData(formData);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Successfully added ${formData['title']}'),
         duration: const Duration(seconds: 3),
@@ -67,6 +84,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             child: ListView(
               children: [
                 TextFormField(
+                  initialValue: formData['title'] as String?,
                   onFieldSubmitted: (value) {
                     priceFocus.requestFocus();
                   },
@@ -80,6 +98,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   onSaved: (newValue) => formData['title'] = newValue as String,
                 ),
                 TextFormField(
+                  initialValue: formData['price'] as String?,
                   focusNode: priceFocus,
                   onFieldSubmitted: (value) {
                     descriptionFocus.requestFocus();
@@ -93,6 +112,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       validations: [IsValidPriceString()]).validate(value),
                 ),
                 TextFormField(
+                  initialValue: formData['description'] as String?,
                   focusNode: descriptionFocus,
                   keyboardType: TextInputType.multiline,
                   maxLines: 3,

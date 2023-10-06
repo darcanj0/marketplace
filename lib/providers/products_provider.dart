@@ -11,21 +11,31 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<Product> get favoriteProducts =>
       [..._products.where((element) => element.isFavorite)];
 
-  void addProductFromData(Map<String, Object> productData) {
+  void saveProductFromData(Map<String, Object> productData) {
+    bool hasId = productData['id'] != null;
     final Product product = Product(
-      id: Random().nextInt(1000000).toString(),
+      id: hasId
+          ? productData['id'] as String
+          : Random().nextInt(1000000).toString(),
       title: productData['title'] as String,
       description: productData['description'] as String,
       price: productData['price'] as double,
       imageUrl: productData['imageUrl'] as String,
     );
-    return addProduct(product);
+    return saveProduct(product);
   }
 
-  void addProduct(Product product) {
-    bool invalidId = _products.any((element) => element.id == product.id);
-    if (invalidId) return;
-    _products.add(product);
+  void saveProduct(Product product) {
+    int foundIndex =
+        _products.indexWhere((element) => element.id == product.id);
+    bool mustUpdate = foundIndex != -1;
+
+    if (mustUpdate) {
+      _products[foundIndex] = product;
+    } else {
+      _products.add(product);
+    }
+
     notifyListeners();
   }
 
