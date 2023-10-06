@@ -24,7 +24,7 @@ class Product with ChangeNotifier {
 
 List<Product> mockProducts = [
   Product(
-    id: 'p1',
+    id: '',
     title: 'Red Shirt',
     description: 'A red shirt - it is pretty red!',
     price: 29.99,
@@ -32,7 +32,7 @@ List<Product> mockProducts = [
         'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
   ),
   Product(
-    id: 'p2',
+    id: '',
     title: 'Trousers',
     description: 'A nice pair of trousers.',
     price: 59.99,
@@ -40,14 +40,14 @@ List<Product> mockProducts = [
         'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
   ),
   Product(
-    id: 'p3',
+    id: '',
     title: 'Yellow Scarf',
     description: 'Warm and cozy - exactly what you need for the winter.',
     price: 19.99,
     imageUrl: 'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
   ),
   Product(
-    id: 'p4',
+    id: '',
     title: 'A Pan',
     description: 'Prepare any meal you want.',
     price: 49.99,
