@@ -13,6 +13,7 @@ class ManageProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final bool reduceIcons = mediaQuery.size.width <= 350;
+    final bool displaySizedBox = mediaQuery.size.width > 400;
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
@@ -32,7 +33,7 @@ class ManageProductCard extends StatelessWidget {
                 iconSize: reduceIcons ? 15 : 20,
                 icon: const Icon(Icons.edit),
               ),
-              if (!reduceIcons)
+              if (displaySizedBox)
                 const SizedBox(
                   width: 10,
                 ),
