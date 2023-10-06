@@ -15,7 +15,7 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<Product> get favoriteProducts =>
       [..._products.where((element) => element.isFavorite)];
 
-  void saveProductFromData(Map<String, Object> productData) {
+  Future<void> saveProductFromData(Map<String, Object> productData) {
     final Product product = Product(
       id: productData['id'] as String? ?? '',
       title: productData['title'] as String,
@@ -26,39 +26,50 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
     return saveProduct(product);
   }
 
-  void saveProduct(Product product) {
-    Map<String, String> body = {
-      'title': product.title,
-      'description': product.description,
-      'price': product.price.toStringAsFixed(2),
-      'imageUrl': product.imageUrl,
-      'isFavorite': product.isFavorite.toString(),
-    };
-
+  Future<void> saveProduct(Product product) {
     bool mustUpdate = product.id.isNotEmpty;
-
     if (mustUpdate) {
-      int foundIndex =
-          products.indexWhere((element) => element.id == product.id);
-      http
-          .patch(Uri.https(domain, updatePath(product.id)),
-              body: jsonEncode(body))
-          .then((_) {
+      //update product
+      Map<String, String> body = {
+        'title': product.title,
+        'description': product.description,
+        'price': product.price.toStringAsFixed(2),
+        'imageUrl': product.imageUrl,
+        'isFavorite': product.isFavorite.toString(),
+      };
+
+      final req = http.patch(Uri.https(domain, updatePath(product.id)),
+          body: jsonEncode(body));
+
+      return req.then<void>((_) {
+        int foundIndex = products.indexWhere(
+          (element) => element.id == product.id,
+        );
         _products[foundIndex] = product;
         notifyListeners();
       });
     } else {
-      http
-          .post(Uri.https(domain, createPath), body: jsonEncode(body))
-          .then((response) {
+      //create product
+      Map<String, String> body = {
+        'title': product.title,
+        'description': product.description,
+        'price': product.price.toStringAsFixed(2),
+        'imageUrl': product.imageUrl,
+        'isFavorite': product.isFavorite.toString(),
+      };
+      final req =
+          http.post(Uri.https(domain, createPath), body: jsonEncode(body));
+
+      return req.then<void>((response) {
         final String createdId = jsonDecode(response.body)['name'];
-        _products.add(Product(
+        final Product productToAdd = Product(
           id: createdId,
           title: product.title,
           description: product.description,
           price: product.price,
           imageUrl: product.imageUrl,
-        ));
+        );
+        _products.add(productToAdd);
         notifyListeners();
       });
     }
