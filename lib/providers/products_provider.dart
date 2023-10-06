@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:clothing/model/product.dart';
 import 'package:flutter/foundation.dart';
 
@@ -8,6 +10,17 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   List<Product> get favoriteProducts =>
       [..._products.where((element) => element.isFavorite)];
+
+  void addProductFromData(Map<String, Object> productData) {
+    final Product product = Product(
+      id: Random().nextInt(1000000).toString(),
+      title: productData['title'] as String,
+      description: productData['description'] as String,
+      price: productData['price'] as double,
+      imageUrl: productData['imageUrl'] as String,
+    );
+    return addProduct(product);
+  }
 
   void addProduct(Product product) {
     bool invalidId = _products.any((element) => element.id == product.id);

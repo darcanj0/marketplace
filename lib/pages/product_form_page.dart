@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:clothing/helpers/string_validation.dart';
-import 'package:clothing/model/product.dart';
+import 'package:clothing/providers/products_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -38,27 +37,27 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Map<String, Object> formData = {};
 
+  void submitForm() {
+    final FormState? formState = formKey.currentState;
+    if (formState!.validate()) {
+      formState.save();
+      context.read<ProductListProvider>().addProductFromData(formData);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Successfully added ${formData['title']}'),
+        duration: const Duration(seconds: 3),
+      ));
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    void submitForm() {
-      final FormState? formState = formKey.currentState;
-      if (formState!.validate()) {
-        formState.save();
-        final newProduct = Product(
-          id: Random().nextInt(1000000).toString(),
-          title: formData['title'] as String,
-          description: formData['description'] as String,
-          price: formData['price'] as double,
-          imageUrl: formData['imageUrl'] as String,
-        );
-      }
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Product'),
         actions: [
-          IconButton(onPressed: submitForm, icon: const Icon(Icons.save))
+          IconButton(
+              onPressed: () => submitForm(), icon: const Icon(Icons.save))
         ],
       ),
       body: Padding(
