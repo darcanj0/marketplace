@@ -4,7 +4,7 @@ import 'package:clothing/pages/cart_page.dart';
 import 'package:clothing/pages/manage_products_page.dart';
 import 'package:clothing/pages/orders_page.dart';
 import 'package:clothing/pages/product_details_page.dart';
-import 'package:clothing/pages/product_form.dart';
+import 'package:clothing/pages/product_form_page.dart';
 import 'package:clothing/pages/home_page.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/routes/app_routes.dart';

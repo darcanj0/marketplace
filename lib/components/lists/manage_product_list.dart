@@ -17,7 +17,7 @@ class ManageProductList extends StatelessWidget {
       itemBuilder: (ctx, index) => Column(
         children: [
           ManageProductCard(product: productList.products[index]),
-          Divider()
+          const Divider()
         ],
       ),
       itemCount: productList.products.length,
