@@ -18,21 +18,24 @@ class ProductsGrid extends StatelessWidget {
     final List<Product> loadedProducts =
         showFavoritesOnly ? provider.favoriteProducts : provider.products;
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(5),
-      itemCount: loadedProducts.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 2.5,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 10,
+    return RefreshIndicator.adaptive(
+      onRefresh: provider.loadProducts,
+      child: GridView.builder(
+        padding: const EdgeInsets.all(5),
+        itemCount: loadedProducts.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 3 / 2.5,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 10,
+        ),
+        itemBuilder: (ctx, index) {
+          return ChangeNotifierProvider.value(
+            value: loadedProducts[index],
+            child: ProductGridCard(key: Key(loadedProducts[index].id)),
+          );
+        },
       ),
-      itemBuilder: (ctx, index) {
-        return ChangeNotifierProvider.value(
-          value: loadedProducts[index],
-          child: ProductGridCard(key: Key(loadedProducts[index].id)),
-        );
-      },
     );
   }
 }

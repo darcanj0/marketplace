@@ -13,14 +13,17 @@ class ManageProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (ctx, index) => Column(
-        children: [
-          ManageProductCard(product: productList.products[index]),
-          const Divider()
-        ],
+    return RefreshIndicator.adaptive(
+      onRefresh: productList.loadProducts,
+      child: ListView.builder(
+        itemBuilder: (ctx, index) => Column(
+          children: [
+            ManageProductCard(product: productList.products[index]),
+            const Divider()
+          ],
+        ),
+        itemCount: productList.products.length,
       ),
-      itemCount: productList.products.length,
     );
   }
 }
