@@ -16,6 +16,7 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       [..._products.where((element) => element.isFavorite)];
 
   Future<void> loadProducts() async {
+    _products.clear();
     final response = await http.get(Uri.https(domain, getAndCreatePath));
     var decodedData = jsonDecode(response.body);
     decodedData.forEach((id, productData) {

@@ -1,4 +1,5 @@
 import 'package:clothing/components/nav/app_drawer.dart';
+import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    setState(() => isLoading = true);
+    context.read<ProductListProvider>().loadProducts().catchError((err) {
+      showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+            title: const Text('Error when loading products!'),
+            content: const Text(
+                "It appears that we couldn't reach our servers. Please contact support."),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Ok'))
+            ]),
+      );
+    }).then((_) {
+      setState(() => isLoading = false);
+    });
+  }
+
+  bool isLoading = false;
   bool showFavoritesOnly = false;
 
   void navigateToCart() => Navigator.of(context).pushNamed(AppRoutes.cart.name);
@@ -57,7 +81,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: ProductsGrid(showFavoritesOnly: showFavoritesOnly),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGrid(showFavoritesOnly: showFavoritesOnly),
       floatingActionButton: FloatingActionButton(
         onPressed: navigateToCart,
         child: badges.Badge(
