@@ -55,18 +55,18 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final Map<String, String> formData = {};
   bool awaitingResponse = false;
 
-  void submitForm() {
+  Future<void> submitForm() async {
     final FormState? formState = formKey.currentState;
     if (formState!.validate()) {
       formState.save();
       setState(() => awaitingResponse = true);
+
       try {
-        context.read<ProductListProvider>().saveProduct(formData).then((_) {
-          setState(() => awaitingResponse = true);
-          Navigator.of(context).pop();
-        });
-      } catch (err) {
-        showDialog<void>(
+        await context.read<ProductListProvider>().saveProduct(formData);
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+      } catch (e) {
+        await showDialog<void>(
           context: context,
           builder: (context) => AlertDialog(
               title: const Text('Error when saving product!'),
@@ -77,7 +77,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     onPressed: () => Navigator.of(context).pop(),
                     child: const Text('Ok'))
               ]),
-        ).then((_) => Navigator.of(context).pop());
+        );
+      } finally {
+        setState(() => awaitingResponse = false);
       }
     }
   }

@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
   static const String domain = 'marketplace-e37b2-default-rtdb.firebaseio.com';
-  static const String createPath = '/products.json';
+  static const String getAndCreatePath = '/products.json';
   String updatePath(String id) => '/products/$id.json';
 
   final List<Product> _products = mockProducts;
@@ -15,7 +15,24 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<Product> get favoriteProducts =>
       [..._products.where((element) => element.isFavorite)];
 
-  Future<void> saveProduct(Map<String, String> productData) {
+  Future<void> loadProducts() async {
+    final response = await http.get(Uri.https(domain, getAndCreatePath));
+    var decodedData = jsonDecode(response.body);
+    decodedData.forEach((id, productData) {
+      final Product loadedProduct = Product(
+        id: id,
+        title: productData['title'] as String,
+        description: productData['description'] as String,
+        price: double.parse(productData['price'] as String),
+        imageUrl: productData['imageUrl'] as String,
+        isFavorite: bool.parse(productData['isFavorite']),
+      );
+      _products.add(loadedProduct);
+    });
+    notifyListeners();
+  }
+
+  Future<void> saveProduct(Map<String, String> productData) async {
     productData['id'] = productData['id'] ?? '';
     bool mustUpdate = productData['id']!.isNotEmpty;
     if (mustUpdate) {
@@ -26,7 +43,7 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       final double price = double.parse(productData['price'] as String);
       final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
-      final req = http.patch(
+      final response = await http.patch(
         Uri.https(domain, updatePath(productId)),
         body: jsonEncode({
           'title': title,
@@ -37,19 +54,18 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
         }),
       );
 
-      return req.then<void>((_) {
-        int foundIndex = products.indexWhere(
-          (element) => element.id == productId,
-        );
-        _products[foundIndex] = Product(
-          id: productId,
-          title: title,
-          description: description,
-          price: price,
-          imageUrl: imageUrl,
-        );
-        notifyListeners();
-      });
+      if (response.statusCode != 200) throw ();
+      int foundIndex = products.indexWhere(
+        (element) => element.id == productId,
+      );
+      _products[foundIndex] = Product(
+        id: productId,
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageUrl,
+      );
+      notifyListeners();
     } else {
       //create product
       final String title = productData['title'] as String;
@@ -58,27 +74,27 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       final double price = double.parse(productData['price'] as String);
       final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
-      final req = http.post(Uri.https(domain, createPath),
+      final response = await http.post(Uri.https(domain, getAndCreatePath),
           body: jsonEncode({
             'title': title,
             'description': description,
-            'price': price.toStringAsFixed(2), //two deci
+            'price': price.toStringAsFixed(2), //two decimal
             'imageUrl': imageUrl,
             'isFavorite': isFavorite.toString(),
           }));
 
-      return req.then<void>((response) {
-        final String createdId = jsonDecode(response.body)['name'];
-        final Product productToAdd = Product(
-          id: createdId,
-          title: title,
-          description: description,
-          price: price,
-          imageUrl: imageUrl,
-        );
-        _products.add(productToAdd);
-        notifyListeners();
-      });
+      if (response.statusCode != 200) throw ();
+
+      final String createdId = jsonDecode(response.body)['name'];
+      final Product productToAdd = Product(
+        id: createdId,
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageUrl,
+      );
+      _products.add(productToAdd);
+      notifyListeners();
     }
   }
 
