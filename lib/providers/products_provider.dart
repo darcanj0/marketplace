@@ -15,59 +15,66 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<Product> get favoriteProducts =>
       [..._products.where((element) => element.isFavorite)];
 
-  Future<void> saveProductFromData(Map<String, Object> productData) {
-    final Product product = Product(
-      id: productData['id'] as String? ?? '',
-      title: productData['title'] as String,
-      description: productData['description'] as String,
-      price: productData['price'] as double,
-      imageUrl: productData['imageUrl'] as String,
-    );
-    return saveProduct(product);
-  }
-
-  Future<void> saveProduct(Product product) {
-    bool mustUpdate = product.id.isNotEmpty;
+  Future<void> saveProduct(Map<String, String> productData) {
+    productData['id'] = productData['id'] ?? '';
+    bool mustUpdate = productData['id']!.isNotEmpty;
     if (mustUpdate) {
-      //update product
-      Map<String, String> body = {
-        'title': product.title,
-        'description': product.description,
-        'price': product.price.toStringAsFixed(2),
-        'imageUrl': product.imageUrl,
-        'isFavorite': product.isFavorite.toString(),
-      };
+      final String title = productData['title'] as String;
+      final String productId = productData['id'] as String;
+      final String imageUrl = productData['imageUrl'] as String;
+      final String description = productData['description'] as String;
+      final double price = double.parse(productData['price'] as String);
+      final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
-      final req = http.patch(Uri.https(domain, updatePath(product.id)),
-          body: jsonEncode(body));
+      final req = http.patch(
+        Uri.https(domain, updatePath(productId)),
+        body: jsonEncode({
+          'title': title,
+          'description': description,
+          'price': price.toStringAsFixed(2),
+          'imageUrl': imageUrl,
+          'isFavorite': isFavorite.toString(),
+        }),
+      );
 
       return req.then<void>((_) {
         int foundIndex = products.indexWhere(
-          (element) => element.id == product.id,
+          (element) => element.id == productId,
         );
-        _products[foundIndex] = product;
+        _products[foundIndex] = Product(
+          id: productId,
+          title: title,
+          description: description,
+          price: price,
+          imageUrl: imageUrl,
+        );
         notifyListeners();
       });
     } else {
       //create product
-      Map<String, String> body = {
-        'title': product.title,
-        'description': product.description,
-        'price': product.price.toStringAsFixed(2),
-        'imageUrl': product.imageUrl,
-        'isFavorite': product.isFavorite.toString(),
-      };
-      final req =
-          http.post(Uri.https(domain, createPath), body: jsonEncode(body));
+      final String title = productData['title'] as String;
+      final String imageUrl = productData['imageUrl'] as String;
+      final String description = productData['description'] as String;
+      final double price = double.parse(productData['price'] as String);
+      final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
+
+      final req = http.post(Uri.https(domain, createPath),
+          body: jsonEncode({
+            'title': title,
+            'description': description,
+            'price': price.toStringAsFixed(2), //two deci
+            'imageUrl': imageUrl,
+            'isFavorite': isFavorite.toString(),
+          }));
 
       return req.then<void>((response) {
         final String createdId = jsonDecode(response.body)['name'];
         final Product productToAdd = Product(
           id: createdId,
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
+          title: title,
+          description: description,
+          price: price,
+          imageUrl: imageUrl,
         );
         _products.add(productToAdd);
         notifyListeners();

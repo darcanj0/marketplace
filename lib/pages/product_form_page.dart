@@ -52,7 +52,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
   void loadImage() => setState(() {});
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final Map<String, Object> formData = {};
+  final Map<String, String> formData = {};
   bool awaitingResponse = false;
 
   void submitForm() {
@@ -60,17 +60,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
     if (formState!.validate()) {
       formState.save();
       setState(() => awaitingResponse = true);
-      context
-          .read<ProductListProvider>()
-          .saveProductFromData(formData)
-          .then((_) {
-        setState(() => awaitingResponse = true);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Successfully added ${formData['title']}'),
-          duration: const Duration(seconds: 3),
-        ));
-        Navigator.of(context).pop();
-      });
+      try {
+        context.read<ProductListProvider>().saveProduct(formData).then((_) {
+          setState(() => awaitingResponse = true);
+          Navigator.of(context).pop();
+        });
+      } catch (err) {
+        showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog(
+              title: const Text('Error when saving product!'),
+              content: const Text(
+                  "It appears that we couldn't reach our servers. Please contact support."),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Ok'))
+              ]),
+        ).then((_) => Navigator.of(context).pop());
+      }
     }
   }
 
@@ -119,7 +127,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             decimal: true),
                         decoration: const InputDecoration(labelText: 'Price'),
                         onSaved: (newValue) =>
-                            formData['price'] = double.parse(newValue ?? '0'),
+                            formData['price'] = newValue ?? '0',
                         validator: (value) => StringValidationComposite(
                                 validations: [IsValidPriceString()])
                             .validate(value),
