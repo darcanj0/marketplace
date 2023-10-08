@@ -1,3 +1,4 @@
+import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/helpers/string_validation.dart';
 import 'package:clothing/model/product.dart';
 import 'package:clothing/providers/products_provider.dart';
@@ -65,13 +66,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
         await context.read<ProductListProvider>().saveProduct(formData);
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
-      } catch (e) {
+      } on AppHttpException catch (err) {
         await showDialog<void>(
           context: context,
           builder: (context) => AlertDialog(
               title: const Text('Error when saving product!'),
-              content: const Text(
-                  "It appears that we couldn't reach our servers. Please contact support."),
+              content: Text(err.msg),
               actions: [
                 TextButton(
                     onPressed: () => Navigator.of(context).pop(),

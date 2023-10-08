@@ -1,3 +1,4 @@
+import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,23 @@ class ManageProductCard extends StatelessWidget {
   void editProduct(BuildContext context) {
     Navigator.of(context)
         .pushNamed(AppRoutes.productForm.name, arguments: product);
+  }
+
+  Future<void> deleteProduct(BuildContext context) async {
+    try {
+      await context.read<ProductListProvider>().deleteProduct(product);
+    } on AppHttpException catch (err) {
+      showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                  title: const Text('Error when deleting product!'),
+                  content: Text(err.msg),
+                  actions: [
+                    TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        child: const Text('Ok'))
+                  ]));
+    }
   }
 
   @override
@@ -31,7 +49,7 @@ class ManageProductCard extends StatelessWidget {
         ),
         title: Text(product.title),
         trailing: SizedBox(
-          width: 100,
+          width: reduceIcons ? 100 : 130,
           child: Row(
             children: [
               IconButton(
@@ -64,9 +82,7 @@ class ManageProductCard extends StatelessWidget {
                             ],
                           )).then((confirmDeletion) {
                     if (confirmDeletion) {
-                      context
-                          .read<ProductListProvider>()
-                          .deleteProduct(product);
+                      deleteProduct(context);
                     }
                   });
                 },

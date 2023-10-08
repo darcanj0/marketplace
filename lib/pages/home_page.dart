@@ -1,4 +1,5 @@
 import 'package:clothing/components/nav/app_drawer.dart';
+import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -21,20 +22,22 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     setState(() => isLoading = true);
-    context.read<ProductListProvider>().loadProducts().catchError((err) {
-      showDialog<void>(
-        context: context,
-        builder: (context) => AlertDialog(
-            title: const Text('Error when loading products!'),
-            content: const Text(
-                "It appears that we couldn't reach our servers. Please contact support."),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Ok'))
-            ]),
-      );
-    }).then((_) {
+    context.read<ProductListProvider>().loadProducts().catchError(
+      (err) {
+        showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog(
+              title: const Text('Error when loading products!'),
+              content: Text(err.toString()),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Ok'))
+              ]),
+        );
+      },
+      test: (error) => error is AppHttpException,
+    ).then((_) {
       setState(() => isLoading = false);
     });
   }
