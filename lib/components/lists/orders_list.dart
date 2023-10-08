@@ -1,5 +1,5 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-
 import '../../providers/orders_provider.dart';
 import '../cards/order_card.dart';
 
@@ -13,10 +13,23 @@ class OrdersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: orderListProvider.ordersCount,
-      itemBuilder: (_, index) =>
-          OrderCard(order: orderListProvider.orders[index]),
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        physics: const BouncingScrollPhysics(),
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad
+        },
+      ),
+      child: RefreshIndicator.adaptive(
+        onRefresh: () => orderListProvider.loadOrders(),
+        child: ListView.builder(
+          itemCount: orderListProvider.ordersCount,
+          itemBuilder: (_, index) =>
+              OrderCard(order: orderListProvider.orders[index]),
+        ),
+      ),
     );
   }
 }

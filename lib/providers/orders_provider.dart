@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:clothing/constants/server.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/model/cart.dart';
@@ -24,9 +23,11 @@ class OrderListProvider with ChangeNotifier {
           'items': cart.items.values
               .map<Map<String, String>>((cartItem) => {
                     'id': cartItem.id,
+                    'productId': cartItem.productId,
                     'unitPrice': cartItem.price.toStringAsFixed(2),
                     'title': cartItem.productTitle,
-                    'quantity': cartItem.quantity.toString()
+                    'quantity': cartItem.quantity.toString(),
+                    'imageUrl': cartItem.imageUrl
                   })
               .toList()
         }));
@@ -58,6 +59,30 @@ class OrderListProvider with ChangeNotifier {
           msg: 'There was an error when loading your orders');
     }
     _orders.clear();
+
+    var decodedData = jsonDecode(response.body);
+    decodedData.forEach((id, orderData) {
+      final List<CartItem> orderItems = [];
+      (orderData['items']).forEach((itemData) {
+        final CartItem item = CartItem(
+          id: itemData['id'],
+          productId: itemData['productId'],
+          productTitle: itemData['title'],
+          price: double.parse(itemData['unitPrice']),
+          imageUrl: itemData['imageUrl'],
+          quantity: int.parse(itemData['quantity']),
+        );
+        orderItems.add(item);
+      });
+      final Order loadedOrder = Order(
+        id: id,
+        orderedAt: DateTime.parse(orderData['orderedAt']),
+        totalPrice: double.parse(orderData['totalPrice']),
+        items: orderItems,
+      );
+      _orders.add(loadedOrder);
+    });
+    notifyListeners();
   }
 }
 

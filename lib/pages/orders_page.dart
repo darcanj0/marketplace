@@ -5,8 +5,23 @@ import 'package:provider/provider.dart';
 
 import '../components/lists/orders_list.dart';
 
-class OrdersPage extends StatelessWidget {
+class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
+
+  @override
+  State<OrdersPage> createState() => _OrdersPageState();
+}
+
+class _OrdersPageState extends State<OrdersPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<OrderListProvider>().loadOrders().then((_) => setState(
+          () => isLoading = false,
+        ));
+  }
+
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +29,16 @@ class OrdersPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Orders'),
       ),
-      body:
-          Consumer<OrderListProvider>(builder: (ctx, orderListProvider, child) {
-        return OrdersList(
-          orderListProvider: orderListProvider,
-        );
-      }),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Consumer<OrderListProvider>(
+              builder: (ctx, orderListProvider, child) {
+              return OrdersList(
+                orderListProvider: orderListProvider,
+              );
+            }),
       drawer: const AppDrawer(),
     );
   }
