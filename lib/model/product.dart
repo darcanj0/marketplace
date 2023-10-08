@@ -32,7 +32,7 @@ class Product with ChangeNotifier {
 
     final response = await http.patch(
       Uri.https(
-          ServerConstants.domain, ServerConstants.updateAndDeletePath(id)),
+          ServerConstants.domain, ServerConstants.updateAndDeletePath(ApiPaths.products, id)),
       body: jsonEncode({
         'isFavorite': isFavorite.toString(),
       }),

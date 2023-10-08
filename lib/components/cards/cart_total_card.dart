@@ -50,8 +50,8 @@ class CartTotalCard extends StatelessWidget {
               child: TextButton(
                 onPressed: cart.itemsCount == 0
                     ? null
-                    : () {
-                        context.read<OrderListProvider>().addOrder(cart);
+                    : () async {
+                        await context.read<OrderListProvider>().addOrder(cart);
                         cart.emptyCart();
                       },
                 child: FittedBox(

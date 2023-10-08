@@ -15,8 +15,8 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   Future<void> loadProducts() async {
     _products.clear();
-    final response = await http.get(
-        Uri.https(ServerConstants.domain, ServerConstants.getAndCreatePath));
+    final response = await http.get(Uri.https(ServerConstants.domain,
+        ServerConstants.getAndCreatePath(ApiPaths.products)));
     if (response.statusCode != 200) {
       throw AppHttpException(
           statusCode: response.statusCode,
@@ -55,7 +55,7 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
       final response = await http.patch(
         Uri.https(ServerConstants.domain,
-            ServerConstants.updateAndDeletePath(productId)),
+            ServerConstants.updateAndDeletePath(ApiPaths.products, productId)),
         body: jsonEncode({
           'title': title,
           'description': description,
@@ -89,7 +89,8 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
       final response = await http.post(
-          Uri.https(ServerConstants.domain, ServerConstants.getAndCreatePath),
+          Uri.https(ServerConstants.domain,
+              ServerConstants.getAndCreatePath(ApiPaths.products)),
           body: jsonEncode({
             'title': title,
             'description': description,
@@ -126,7 +127,7 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       notifyListeners();
 
       final response = await http.delete(Uri.https(ServerConstants.domain,
-          ServerConstants.updateAndDeletePath(product.id)));
+          ServerConstants.updateAndDeletePath(ApiPaths.products, product.id)));
       if (response.statusCode >= 400) {
         _products.insert(foundIndex, product);
         notifyListeners();

@@ -96,7 +96,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   child: ListView(
                     children: [
                       TextFormField(
-                        initialValue: formData['title'] as String?,
+                        initialValue: formData['title'],
                         onFieldSubmitted: (value) {
                           priceFocus.requestFocus();
                         },
@@ -111,7 +111,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             formData['title'] = newValue as String,
                       ),
                       TextFormField(
-                        initialValue: formData['price'] as String?,
+                        initialValue: formData['price'],
                         focusNode: priceFocus,
                         onFieldSubmitted: (value) {
                           descriptionFocus.requestFocus();
@@ -126,7 +126,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             .validate(value),
                       ),
                       TextFormField(
-                        initialValue: formData['description'] as String?,
+                        initialValue: formData['description'],
                         focusNode: descriptionFocus,
                         keyboardType: TextInputType.multiline,
                         maxLines: 3,
