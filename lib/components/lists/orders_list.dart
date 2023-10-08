@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/order.dart';
+import '../../providers/orders_provider.dart';
 import '../cards/order_card.dart';
 
 class OrdersList extends StatelessWidget {
@@ -9,7 +9,7 @@ class OrdersList extends StatelessWidget {
     super.key,
   });
 
-  final OrderList orderListProvider;
+  final OrderListProvider orderListProvider;
 
   @override
   Widget build(BuildContext context) {

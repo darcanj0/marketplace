@@ -1,5 +1,5 @@
 import 'package:clothing/components/nav/app_drawer.dart';
-import 'package:clothing/model/order.dart';
+import 'package:clothing/providers/orders_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +14,8 @@ class OrdersPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Orders'),
       ),
-      body: Consumer<OrderList>(builder: (ctx, orderListProvider, child) {
+      body:
+          Consumer<OrderListProvider>(builder: (ctx, orderListProvider, child) {
         return OrdersList(
           orderListProvider: orderListProvider,
         );

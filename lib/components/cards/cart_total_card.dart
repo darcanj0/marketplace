@@ -1,4 +1,4 @@
-import 'package:clothing/model/order.dart';
+import 'package:clothing/providers/orders_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +51,7 @@ class CartTotalCard extends StatelessWidget {
                 onPressed: cart.itemsCount == 0
                     ? null
                     : () {
-                        context.read<OrderList>().addOrder(cart);
+                        context.read<OrderListProvider>().addOrder(cart);
                         cart.emptyCart();
                       },
                 child: FittedBox(

@@ -1,5 +1,5 @@
 import 'package:clothing/model/cart.dart';
-import 'package:clothing/model/order.dart';
+import 'package:clothing/providers/orders_provider.dart';
 import 'package:clothing/pages/cart_page.dart';
 import 'package:clothing/pages/manage_products_page.dart';
 import 'package:clothing/pages/orders_page.dart';
@@ -7,7 +7,7 @@ import 'package:clothing/pages/product_details_page.dart';
 import 'package:clothing/pages/product_form_page.dart';
 import 'package:clothing/pages/home_page.dart';
 import 'package:clothing/providers/products_provider.dart';
-import 'package:clothing/routes/app_routes.dart';
+import 'package:clothing/constants/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +18,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => ProductListProvider()),
         ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(create: (_) => OrderList())
+        ChangeNotifierProvider(create: (_) => OrderListProvider())
       ],
       child: const MyApp(),
     ),
