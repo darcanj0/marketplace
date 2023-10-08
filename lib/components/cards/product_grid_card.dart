@@ -1,3 +1,4 @@
+import 'package:clothing/helpers/exception_feedback_handler.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/model/product.dart';
@@ -65,15 +66,10 @@ class ProductGridCard extends StatelessWidget {
                 builder: (context, value, child) => IconButton(
                   onPressed: () {
                     value.toggleFavorite().catchError(
-                      (err) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(err.toString()),
-                          duration: const Duration(seconds: 3),
-                        ));
-                        print(err.toString());
-                      },
-                      test: (error) => error is AppHttpException,
-                    );
+                          (err) => ExceptionFeedbackHandler.withSnackbar(
+                              context, err),
+                          test: (error) => error is AppHttpException,
+                        );
                   },
                   icon: Icon(
                     value.isFavorite

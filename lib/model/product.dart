@@ -29,20 +29,18 @@ class Product with ChangeNotifier {
 
   Future<void> toggleFavorite() async {
     _toggleFavorite();
-    try {
-      await http.patch(
-        Uri.https(
-            ServerConstants.domain, ServerConstants.updateAndDeletePath(id)),
-        body: jsonEncode({
-          'isFavorite': isFavorite.toString(),
-        }),
-      );
-    } catch (e) {
-      _toggleFavorite();
-      throw AppHttpException(
-          statusCode: 400,
-          msg: 'There was an error when favoriting the product');
-    }
+
+    final response = await http.patch(
+      Uri.https(
+          ServerConstants.domain, ServerConstants.updateAndDeletePath(id)),
+      body: jsonEncode({
+        'isFavorite': isFavorite.toString(),
+      }),
+    );
+    if (response.statusCode >= 400) {}
+    _toggleFavorite();
+    throw AppHttpException(
+        statusCode: 400, msg: 'There was an error when favoriting the product');
   }
 }
 

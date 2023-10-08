@@ -16,25 +16,25 @@ class ManageProductCard extends StatelessWidget {
         .pushNamed(AppRoutes.productForm.name, arguments: product);
   }
 
-  Future<void> deleteProduct(BuildContext context) async {
-    try {
-      await context.read<ProductListProvider>().deleteProduct(product);
-    } on AppHttpException catch (err) {
-      showDialog<void>(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                  title: const Text('Error when deleting product!'),
-                  content: Text(err.msg),
-                  actions: [
-                    TextButton(
-                        onPressed: () => Navigator.of(ctx).pop(),
-                        child: const Text('Ok'))
-                  ]));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    Future<void> deleteProduct(BuildContext context) async {
+      try {
+        await context.read<ProductListProvider>().deleteProduct(product);
+      } on AppHttpException catch (err) {
+        showDialog<void>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                    title: const Text('Error when deleting product!'),
+                    content: Text(err.msg),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          child: const Text('Ok'))
+                    ]));
+      }
+    }
+
     final MediaQueryData mediaQuery = MediaQuery.of(context);
     final bool reduceIcons = mediaQuery.size.width <= 350;
     final bool displaySizedBox = mediaQuery.size.width > 400;
@@ -63,7 +63,7 @@ class ManageProductCard extends StatelessWidget {
                 ),
               IconButton(
                 onPressed: () {
-                  showDialog(
+                  showDialog<bool>(
                       context: context,
                       builder: (ctx) => AlertDialog(
                             title: const Text('Are you sure?'),
@@ -81,7 +81,7 @@ class ManageProductCard extends StatelessWidget {
                                   child: const Text('NO'))
                             ],
                           )).then((confirmDeletion) {
-                    if (confirmDeletion) {
+                    if (confirmDeletion as bool) {
                       deleteProduct(context);
                     }
                   });
