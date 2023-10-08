@@ -39,7 +39,7 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
     } catch (e) {
       throw AppHttpException(
           statusCode: 400,
-          msg: 'There was an error when retrieving data from our servers');
+          msg: 'There was an error when parsing data from our servers');
     }
   }
 

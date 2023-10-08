@@ -1,4 +1,5 @@
 import 'package:clothing/components/nav/app_drawer.dart';
+import 'package:clothing/helpers/exception_feedback_handler.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/constants/app_routes.dart';
@@ -22,22 +23,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     setState(() => isLoading = true);
-    context.read<ProductListProvider>().loadProducts().catchError(
-      (err) {
-        showDialog<void>(
-          context: context,
-          builder: (context) => AlertDialog(
-              title: const Text('Error when loading products!'),
-              content: Text(err.toString()),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Ok'))
-              ]),
-        );
-      },
-      test: (error) => error is AppHttpException,
-    ).then((_) {
+    context
+        .read<ProductListProvider>()
+        .loadProducts()
+        .catchError(
+          (err) => ExceptionFeedbackHandler.withDialog(context, err),
+          test: (error) => error is AppHttpException,
+        )
+        .then((_) {
       setState(() => isLoading = false);
     });
   }
