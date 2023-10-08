@@ -1,4 +1,4 @@
-import 'package:clothing/routes/app_routes.dart';
+import 'package:clothing/constants/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {

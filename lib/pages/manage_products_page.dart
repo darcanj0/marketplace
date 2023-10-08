@@ -1,6 +1,6 @@
 import 'package:clothing/components/nav/app_drawer.dart';
 import 'package:clothing/providers/products_provider.dart';
-import 'package:clothing/routes/app_routes.dart';
+import 'package:clothing/constants/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,14 +1,11 @@
 import 'dart:convert';
+import 'package:clothing/constants/server.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:http/http.dart' as http;
 import 'package:clothing/model/product.dart';
 import 'package:flutter/foundation.dart';
 
 class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  static const String domain = 'marketplace-e37b2-default-rtdb.firebaseio.com';
-  static const String getAndCreatePath = '/products.json';
-  String updateAndDeletePath(String id) => '/products/$id.json';
-
   final List<Product> _products = [];
 
   List<Product> get products => [..._products];
@@ -18,7 +15,8 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   Future<void> loadProducts() async {
     _products.clear();
-    final response = await http.get(Uri.https(domain, getAndCreatePath));
+    final response = await http.get(
+        Uri.https(ServerConstants.domain, ServerConstants.getAndCreatePath));
     if (response.statusCode != 200) {
       throw AppHttpException(
           statusCode: response.statusCode,
@@ -45,7 +43,7 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
     }
   }
 
-  Future<void> saveProduct(Map<String, String> productData) async {
+  Future<void> saveProductFromData(Map<String, String> productData) async {
     productData['id'] = productData['id'] ?? '';
     bool mustUpdate = productData['id']!.isNotEmpty;
     if (mustUpdate) {
@@ -54,16 +52,15 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       final String imageUrl = productData['imageUrl'] as String;
       final String description = productData['description'] as String;
       final double price = double.parse(productData['price'] as String);
-      final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
       final response = await http.patch(
-        Uri.https(domain, updateAndDeletePath(productId)),
+        Uri.https(ServerConstants.domain,
+            ServerConstants.updateAndDeletePath(productId)),
         body: jsonEncode({
           'title': title,
           'description': description,
           'price': price.toStringAsFixed(2),
           'imageUrl': imageUrl,
-          'isFavorite': isFavorite.toString(),
         }),
       );
 
@@ -91,7 +88,8 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       final double price = double.parse(productData['price'] as String);
       final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
-      final response = await http.post(Uri.https(domain, getAndCreatePath),
+      final response = await http.post(
+          Uri.https(ServerConstants.domain, ServerConstants.getAndCreatePath),
           body: jsonEncode({
             'title': title,
             'description': description,
@@ -127,8 +125,8 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       _products.remove(_products[foundIndex]);
       notifyListeners();
 
-      final response =
-          await http.delete(Uri.https(domain, updateAndDeletePath(product.id)));
+      final response = await http.delete(Uri.https(ServerConstants.domain,
+          ServerConstants.updateAndDeletePath(product.id)));
       if (response.statusCode >= 400) {
         _products.insert(foundIndex, product);
         notifyListeners();

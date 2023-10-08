@@ -1,6 +1,6 @@
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/model/product.dart';
-import 'package:clothing/routes/app_routes.dart';
+import 'package:clothing/constants/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,7 +62,9 @@ class ProductGridCard extends StatelessWidget {
             Positioned(
               child: Consumer<Product>(
                 builder: (context, value, child) => IconButton(
-                  onPressed: value.toggleFavorite,
+                  onPressed: () {
+                    value.toggleFavorite();
+                  },
                   icon: Icon(
                     value.isFavorite
                         ? Icons.favorite
