@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../../helpers/exception_feedback_handler.dart';
@@ -14,17 +16,27 @@ class ManageProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator.adaptive(
-      onRefresh: () => productList.loadProducts().catchError(
-          (err) => ExceptionFeedbackHandler.withDialog(context, err)),
-      child: ListView.builder(
-        itemBuilder: (ctx, index) => Column(
-          children: [
-            ManageProductCard(product: productList.products[index]),
-            const Divider()
-          ],
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        physics: const BouncingScrollPhysics(),
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad
+        },
+      ),
+      child: RefreshIndicator.adaptive(
+        onRefresh: () => productList.loadProducts().catchError(
+            (err) => ExceptionFeedbackHandler.withDialog(context, err)),
+        child: ListView.builder(
+          itemBuilder: (ctx, index) => Column(
+            children: [
+              ManageProductCard(product: productList.products[index]),
+              const Divider()
+            ],
+          ),
+          itemCount: productList.products.length,
         ),
-        itemCount: productList.products.length,
       ),
     );
   }

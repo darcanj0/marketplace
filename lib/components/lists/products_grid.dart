@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:clothing/helpers/exception_feedback_handler.dart';
 import 'package:clothing/model/product.dart';
 import 'package:clothing/providers/products_provider.dart';
@@ -19,24 +21,34 @@ class ProductsGrid extends StatelessWidget {
     final List<Product> loadedProducts =
         showFavoritesOnly ? provider.favoriteProducts : provider.products;
 
-    return RefreshIndicator.adaptive(
-      onRefresh: () => provider.loadProducts().catchError(
-          (err) => ExceptionFeedbackHandler.withDialog(context, err)),
-      child: GridView.builder(
-        padding: const EdgeInsets.all(5),
-        itemCount: loadedProducts.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2.5,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 10,
-        ),
-        itemBuilder: (ctx, index) {
-          return ChangeNotifierProvider.value(
-            value: loadedProducts[index],
-            child: ProductGridCard(key: Key(loadedProducts[index].id)),
-          );
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        physics: const BouncingScrollPhysics(),
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.trackpad
         },
+      ),
+      child: RefreshIndicator.adaptive(
+        onRefresh: () => provider.loadProducts().catchError(
+            (err) => ExceptionFeedbackHandler.withDialog(context, err)),
+        child: GridView.builder(
+          padding: const EdgeInsets.all(5),
+          itemCount: loadedProducts.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3 / 2.5,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 10,
+          ),
+          itemBuilder: (ctx, index) {
+            return ChangeNotifierProvider.value(
+              value: loadedProducts[index],
+              child: ProductGridCard(key: Key(loadedProducts[index].id)),
+            );
+          },
+        ),
       ),
     );
   }
