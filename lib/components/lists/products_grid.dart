@@ -1,3 +1,4 @@
+import 'package:clothing/helpers/exception_feedback_handler.dart';
 import 'package:clothing/model/product.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,8 @@ class ProductsGrid extends StatelessWidget {
         showFavoritesOnly ? provider.favoriteProducts : provider.products;
 
     return RefreshIndicator.adaptive(
-      onRefresh: provider.loadProducts,
+      onRefresh: () => provider.loadProducts().catchError(
+          (err) => ExceptionFeedbackHandler.withDialog(context, err)),
       child: GridView.builder(
         padding: const EdgeInsets.all(5),
         itemCount: loadedProducts.length,
