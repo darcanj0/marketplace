@@ -1,3 +1,4 @@
+import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/model/product.dart';
 import 'package:clothing/constants/app_routes.dart';
@@ -63,7 +64,16 @@ class ProductGridCard extends StatelessWidget {
               child: Consumer<Product>(
                 builder: (context, value, child) => IconButton(
                   onPressed: () {
-                    value.toggleFavorite();
+                    value.toggleFavorite().catchError(
+                      (err) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(err.toString()),
+                          duration: const Duration(seconds: 3),
+                        ));
+                        print(err.toString());
+                      },
+                      test: (error) => error is AppHttpException,
+                    );
                   },
                   icon: Icon(
                     value.isFavorite

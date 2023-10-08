@@ -1,4 +1,10 @@
+import 'dart:convert';
+
+import 'package:clothing/constants/server.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import '../helpers/http_exception.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -16,9 +22,27 @@ class Product with ChangeNotifier {
       required this.imageUrl,
       this.isFavorite = false});
 
-  void toggleFavorite() {
+  void _toggleFavorite() {
     isFavorite = !isFavorite;
     notifyListeners();
+  }
+
+  Future<void> toggleFavorite() async {
+    _toggleFavorite();
+    try {
+      await http.patch(
+        Uri.https(
+            ServerConstants.domain, ServerConstants.updateAndDeletePath(id)),
+        body: jsonEncode({
+          'isFavorite': isFavorite.toString(),
+        }),
+      );
+    } catch (e) {
+      _toggleFavorite();
+      throw AppHttpException(
+          statusCode: 400,
+          msg: 'There was an error when favoriting the product');
+    }
   }
 }
 

@@ -63,7 +63,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
       setState(() => awaitingResponse = true);
 
       try {
-        await context.read<ProductListProvider>().saveProduct(formData);
+        await context.read<ProductListProvider>().saveProductFromData(formData);
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
       } on AppHttpException catch (err) {
