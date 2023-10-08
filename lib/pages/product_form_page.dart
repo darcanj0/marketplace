@@ -1,3 +1,4 @@
+import 'package:clothing/helpers/exception_feedback_handler.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/helpers/string_validation.dart';
 import 'package:clothing/model/product.dart';
@@ -67,17 +68,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
       } on AppHttpException catch (err) {
-        await showDialog<void>(
-          context: context,
-          builder: (context) => AlertDialog(
-              title: const Text('Error when saving product!'),
-              content: Text(err.msg),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Ok'))
-              ]),
-        );
+        await ExceptionFeedbackHandler.withSnackbar(context, err);
       } finally {
         setState(() => awaitingResponse = false);
       }

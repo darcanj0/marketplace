@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 
 class ExceptionFeedbackHandler {
   static Future<void> withSnackbar(
-      BuildContext context, AppHttpException err) async {}
+      BuildContext context, AppHttpException err) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(err.msg),
+      duration: const Duration(seconds: 3),
+    ));
+  }
 
   static Future<void> withDialog(
       BuildContext context, AppHttpException err) async {
@@ -11,7 +16,7 @@ class ExceptionFeedbackHandler {
       context: context,
       builder: (context) => AlertDialog(
           title: const Text('An error occurred!'),
-          content: Text('${err.toString()} [CODE ${err.statusCode}]'),
+          content: Text('${err.msg} [CODE ${err.statusCode}]'),
           actions: [
             TextButton(
                 onPressed: () => Navigator.of(context).pop(),
