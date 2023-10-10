@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:clothing/components/forms/auth_form.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatelessWidget {
@@ -33,7 +34,7 @@ class AuthPage extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(15),
-                    transform: Matrix4.rotationZ(-4 * pi / 180)..translate(5),
+                    transform: Matrix4.rotationZ(-4 * pi / 180)..translate(-5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: colorScheme.primary.withOpacity(.75),
@@ -58,6 +59,10 @@ class AuthPage extends StatelessWidget {
                       "Dan's Marketplace",
                       style: textTheme.displayLarge,
                     ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: AuthForm(),
                   )
                 ],
               ),
