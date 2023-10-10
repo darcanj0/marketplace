@@ -1,4 +1,5 @@
 import 'package:clothing/model/cart.dart';
+import 'package:clothing/pages/auth_page.dart';
 import 'package:clothing/providers/orders_provider.dart';
 import 'package:clothing/pages/cart_page.dart';
 import 'package:clothing/pages/manage_products_page.dart';
@@ -34,6 +35,11 @@ class MyApp extends StatelessWidget {
     );
 
     final TextTheme originalTextTheme = Theme.of(context).textTheme.copyWith(
+        displayLarge: TextStyle(
+          color: colorScheme.background,
+          fontSize: 35,
+          fontWeight: FontWeight.bold,
+        ),
         headlineMedium: TextStyle(
           color: colorScheme.onBackground,
           fontSize: 32,
@@ -70,14 +76,15 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.nunitoTextTheme(originalTextTheme),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const AuthPage(),
       routes: {
         AppRoutes.home.name: (context) => const HomePage(),
         AppRoutes.productDetails.name: (context) => const ProductDetailsPage(),
         AppRoutes.cart.name: (context) => const CartPage(),
         AppRoutes.orders.name: (context) => const OrdersPage(),
         AppRoutes.manageProducts.name: (context) => const ManageProductsPage(),
-        AppRoutes.productForm.name: (context) => const ProductFormPage()
+        AppRoutes.productForm.name: (context) => const ProductFormPage(),
+        AppRoutes.auth.name: (context) => const AuthPage()
       },
       debugShowCheckedModeBanner: false,
     );
