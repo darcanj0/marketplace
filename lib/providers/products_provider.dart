@@ -1,11 +1,19 @@
-import 'dart:convert';
 import 'package:clothing/constants/server.dart';
 import 'package:clothing/helpers/http_exception.dart';
-import 'package:http/http.dart' as http;
+import 'package:clothing/helpers/id_gen_adapter.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:clothing/model/product.dart';
 import 'package:flutter/foundation.dart';
 
 class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  final FirebaseDatabase instance = FirebaseDatabase.instance;
+  final IIdGen idGenerator = UUIDAdapter();
+  DatabaseReference getReferenceFrom(String id) {
+    return instance.ref('${ApiPaths.products.name}/$id');
+  }
+
+  DatabaseReference get readRef => instance.ref().child(ApiPaths.products.name);
+
   final List<Product> _products = [];
 
   List<Product> get products => [..._products];
@@ -15,16 +23,11 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   Future<void> loadProducts() async {
     _products.clear();
-    final response = await http.get(Uri.https(ServerConstants.domain,
-        ServerConstants.getAndCreatePath(ApiPaths.products)));
-    if (response.statusCode != 200) {
-      throw AppHttpException(
-          statusCode: response.statusCode,
-          msg: 'An error occurred when loading products');
-    }
-    try {
-      var decodedData = jsonDecode(response.body);
-      decodedData.forEach((id, productData) {
+
+    final snapshot = await readRef.get();
+    if (snapshot.exists) {
+      final dynamic productsData = snapshot.value;
+      productsData.forEach((id, productData) {
         final Product loadedProduct = Product(
           id: id,
           title: productData['title'] as String,
@@ -35,12 +38,11 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
         );
         _products.add(loadedProduct);
       });
-      notifyListeners();
-    } catch (e) {
+    } else {
       throw AppHttpException(
-          statusCode: 400,
-          msg: 'There was an error when parsing data from our servers');
+          statusCode: 400, msg: 'An error occurred when loading products');
     }
+    notifyListeners();
   }
 
   Future<void> saveProductFromData(Map<String, String> productData) async {
@@ -53,21 +55,16 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       final String description = productData['description'] as String;
       final double price = double.parse(productData['price'] as String);
 
-      final response = await http.patch(
-        Uri.https(ServerConstants.domain,
-            ServerConstants.updateAndDeletePath(ApiPaths.products, productId)),
-        body: jsonEncode({
+      try {
+        await getReferenceFrom(productId).update({
           'title': title,
           'description': description,
           'price': price.toStringAsFixed(2),
           'imageUrl': imageUrl,
-        }),
-      );
-
-      if (response.statusCode != 200) {
+        });
+      } catch (e) {
         throw AppHttpException(
-            statusCode: response.statusCode,
-            msg: 'There was an error while saving the product');
+            statusCode: 400, msg: 'An error occurred while updating product');
       }
       int foundIndex = products.indexWhere(
         (element) => element.id == productId,
@@ -88,24 +85,21 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       final double price = double.parse(productData['price'] as String);
       final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
-      final response = await http.post(
-          Uri.https(ServerConstants.domain,
-              ServerConstants.getAndCreatePath(ApiPaths.products)),
-          body: jsonEncode({
-            'title': title,
-            'description': description,
-            'price': price.toStringAsFixed(2), //two decimal
-            'imageUrl': imageUrl,
-            'isFavorite': isFavorite.toString(),
-          }));
-
-      if (response.statusCode != 200) {
+      final String createdId = idGenerator.newId();
+      try {
+        await getReferenceFrom(createdId).set({
+          'title': title,
+          'description': description,
+          'price': price.toStringAsFixed(2), //two decimal
+          'imageUrl': imageUrl,
+          'isFavorite': isFavorite.toString(),
+        });
+      } catch (e) {
         throw AppHttpException(
-            statusCode: response.statusCode,
+            statusCode: 400,
             msg: 'There was an error while saving the product');
       }
 
-      final String createdId = jsonDecode(response.body)['name'];
       final Product productToAdd = Product(
         id: createdId,
         title: title,
@@ -126,13 +120,13 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
       _products.remove(_products[foundIndex]);
       notifyListeners();
 
-      final response = await http.delete(Uri.https(ServerConstants.domain,
-          ServerConstants.updateAndDeletePath(ApiPaths.products, product.id)));
-      if (response.statusCode >= 400) {
+      try {
+        await getReferenceFrom(product.id).remove();
+      } catch (e) {
         _products.insert(foundIndex, product);
         notifyListeners();
         throw AppHttpException(
-            statusCode: response.statusCode,
+            statusCode: 400,
             msg: 'There was an error while deleting the product');
       }
     }

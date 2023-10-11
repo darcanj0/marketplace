@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:clothing/constants/server.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/model/cart.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class OrderListProvider with ChangeNotifier {
+  final FirebaseDatabase db = FirebaseDatabase.instance;
   final List<Order> _orders = [];
 
   List<Order> get orders => [..._orders];

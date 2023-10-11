@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.nunitoTextTheme(originalTextTheme),
         useMaterial3: true,
       ),
-      home: const AuthPage(),
+      home: const HomePage(),
       routes: {
         AppRoutes.home.name: (context) => const HomePage(),
         AppRoutes.productDetails.name: (context) => const ProductDetailsPage(),
