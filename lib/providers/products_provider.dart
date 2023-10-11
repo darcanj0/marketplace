@@ -1,18 +1,11 @@
-import 'package:clothing/constants/server.dart';
 import 'package:clothing/helpers/http_exception.dart';
-import 'package:clothing/helpers/id_gen_adapter.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:clothing/providers/db_provider.dart';
 import 'package:clothing/model/product.dart';
 import 'package:flutter/foundation.dart';
 
-class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  final FirebaseDatabase instance = FirebaseDatabase.instance;
-  final IIdGen idGenerator = UUIDAdapter();
-  DatabaseReference getReferenceFrom(String id) {
-    return instance.ref('${ApiPaths.products.name}/$id');
-  }
-
-  DatabaseReference get readRef => instance.ref().child(ApiPaths.products.name);
+class ProductListProvider extends DbProvider
+    with ChangeNotifier, DiagnosticableTreeMixin {
+  ProductListProvider({required super.dbPath});
 
   final List<Product> _products = [];
 
@@ -26,21 +19,25 @@ class ProductListProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
     final snapshot = await readRef.get();
     if (snapshot.exists) {
-      final dynamic productsData = snapshot.value;
-      productsData.forEach((id, productData) {
-        final Product loadedProduct = Product(
-          id: id,
-          title: productData['title'] as String,
-          description: productData['description'] as String,
-          price: double.parse(productData['price'] as String),
-          imageUrl: productData['imageUrl'] as String,
-          isFavorite: bool.parse(productData['isFavorite']),
-        );
-        _products.add(loadedProduct);
-      });
+      try {
+        final dynamic productsData = snapshot.value;
+        productsData.forEach((id, productData) {
+          final Product loadedProduct = Product(
+            id: id,
+            title: productData['title'] as String,
+            description: productData['description'] as String,
+            price: double.parse(productData['price'] as String),
+            imageUrl: productData['imageUrl'] as String,
+            isFavorite: bool.parse(productData['isFavorite']),
+          );
+          _products.add(loadedProduct);
+        });
+      } catch (e) {
+        throw AppHttpException(
+            statusCode: 400, msg: 'An error occurred when loading products');
+      }
     } else {
-      throw AppHttpException(
-          statusCode: 400, msg: 'An error occurred when loading products');
+      throw AppHttpException(statusCode: 400, msg: 'No products found');
     }
     notifyListeners();
   }

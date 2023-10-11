@@ -1,4 +1,6 @@
 import 'package:clothing/components/nav/app_drawer.dart';
+import 'package:clothing/helpers/exception_feedback_handler.dart';
+import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/providers/orders_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +18,16 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   void initState() {
     super.initState();
-    context.read<OrderListProvider>().loadOrders().then((_) => setState(
-          () => isLoading = false,
-        ));
+    context
+        .read<OrderListProvider>()
+        .loadOrders()
+        .catchError(
+          (err) => ExceptionFeedbackHandler.withSnackbar(context, err),
+          test: (error) => error is AppHttpException,
+        )
+        .then((_) => setState(
+              () => isLoading = false,
+            ));
   }
 
   bool isLoading = true;

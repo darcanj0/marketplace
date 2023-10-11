@@ -1,3 +1,4 @@
+import 'package:clothing/constants/server.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/pages/auth_page.dart';
 import 'package:clothing/providers/orders_provider.dart';
@@ -21,9 +22,11 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ProductListProvider()),
+        ChangeNotifierProvider(
+            create: (_) => ProductListProvider(dbPath: DbPaths.products)),
         ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(create: (_) => OrderListProvider())
+        ChangeNotifierProvider(
+            create: (_) => OrderListProvider(dbPath: DbPaths.orders))
       ],
       child: const MyApp(),
     ),
