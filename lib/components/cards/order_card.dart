@@ -20,7 +20,7 @@ class OrderCard extends StatelessWidget {
       elevation: 2,
       child: ExpansionTile(
         backgroundColor: colorScheme.primaryContainer,
-        leading: FittedBox(child: Text('#${order.id}')),
+        leading: FittedBox(child: Text('#${order.id.substring(0, 8)}')),
         title: Text(
           'U\$ ${order.totalPrice.toStringAsFixed(2)}',
           style: textTheme.labelLarge,
