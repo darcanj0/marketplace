@@ -11,7 +11,10 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
-  final AuthMode authMode = AuthMode.signup;
+  AuthMode authMode = AuthMode.signup;
+  bool get isLogin => authMode == AuthMode.login;
+  bool get isSignup => authMode == AuthMode.signup;
+
   Map<String, String> formData = {'email': '', 'password': ''};
   final passwordController = TextEditingController();
   final authFormKey = GlobalKey<FormState>();
@@ -19,9 +22,17 @@ class _AuthFormState extends State<AuthForm> {
   void submitForm() {
     final formState = authFormKey.currentState;
     if (formState!.validate()) {
+      setState(() => isLoading = true);
       formState.save();
+
+      if (isLogin) {
+      } else {}
+
+      setState(() => isLoading = false);
     }
   }
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +43,9 @@ class _AuthFormState extends State<AuthForm> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8,
       child: Container(
-        height: 400,
+        height: isLogin ? 350 : 400,
         width: deviceWidth * 0.75,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Form(
             key: authFormKey,
             child: Column(
@@ -43,7 +54,9 @@ class _AuthFormState extends State<AuthForm> {
                   onSaved: (email) => formData['email'] = email ?? '',
                   validator: (value) {
                     final String email = value ?? '';
-                    if (!email.trim().contains('@') || email.isEmpty) {
+                    if (!email.trim().contains('@') ||
+                        email.isEmpty ||
+                        !email.endsWith('.com')) {
                       return 'Invalid email';
                     }
                     return null;
@@ -70,10 +83,10 @@ class _AuthFormState extends State<AuthForm> {
                     labelText: 'Password',
                   ),
                 ),
-                if (authMode == AuthMode.signup)
+                if (isSignup)
                   TextFormField(
                     validator: (value) {
-                      if (authMode == AuthMode.login) return null;
+                      if (isLogin) return null;
                       final String confirmation = value ?? '';
                       if (confirmation.isEmpty ||
                           confirmation != passwordController.text) {
@@ -88,20 +101,33 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                   ),
                 const SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
-                ElevatedButton(
-                    onPressed: submitForm,
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: colorScheme.primary,
-                        enableFeedback: true,
-                        elevation: 5,
-                        foregroundColor: colorScheme.background,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5))),
-                    child: Text(
-                      authMode == AuthMode.signup ? 'Register' : 'Login',
-                    ))
+                isLoading
+                    ? const CircularProgressIndicator.adaptive()
+                    : ElevatedButton(
+                        onPressed: submitForm,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: colorScheme.primary,
+                            enableFeedback: true,
+                            elevation: 5,
+                            foregroundColor: colorScheme.background,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                        child: Text(
+                          isSignup ? 'Register' : 'Login',
+                        ),
+                      ),
+                const Divider(
+                  height: 30,
+                ),
+                TextButton(
+                  onPressed: () => setState(() => isLogin
+                      ? authMode = AuthMode.signup
+                      : authMode = AuthMode.login),
+                  child:
+                      Text(isLogin ? 'New user?' : 'Already have an account?'),
+                )
               ],
             )),
       ),
