@@ -1,6 +1,7 @@
 import 'package:clothing/constants/server.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/pages/auth_page.dart';
+import 'package:clothing/providers/auth_provider.dart';
 import 'package:clothing/providers/orders_provider.dart';
 import 'package:clothing/pages/cart_page.dart';
 import 'package:clothing/pages/manage_products_page.dart';
@@ -10,6 +11,7 @@ import 'package:clothing/pages/product_form_page.dart';
 import 'package:clothing/pages/home_page.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/constants/app_routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        Provider(
+          create: (context) => AuthProvider(),
+        ),
         ChangeNotifierProvider(
             create: (_) => ProductListProvider(dbPath: DbPaths.products)),
         ChangeNotifierProvider(create: (_) => Cart()),
@@ -83,7 +88,19 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.nunitoTextTheme(originalTextTheme),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: Consumer<AuthProvider>(
+        builder: (context, value, child) {
+          return StreamBuilder<User?>(
+            stream: value.firebase.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return const HomePage();
+              }
+              return const AuthPage();
+            },
+          );
+        },
+      ),
       routes: {
         AppRoutes.home.name: (context) => const HomePage(),
         AppRoutes.productDetails.name: (context) => const ProductDetailsPage(),

@@ -1,5 +1,7 @@
 import 'package:clothing/constants/app_routes.dart';
+import 'package:clothing/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -31,7 +33,12 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.edit_rounded),
             title: const Text('Manage Products'),
             onTap: () => navigateToReplacing(context, AppRoutes.manageProducts),
-          )
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Sign Out'),
+            onTap: () => context.read<AuthProvider>().signout(),
+          ),
         ],
       ),
     );

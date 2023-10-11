@@ -1,5 +1,7 @@
 import 'package:clothing/helpers/string_validation.dart';
+import 'package:clothing/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum AuthMode { login, signup }
 
@@ -11,7 +13,7 @@ class AuthForm extends StatefulWidget {
 }
 
 class _AuthFormState extends State<AuthForm> {
-  AuthMode authMode = AuthMode.signup;
+  AuthMode authMode = AuthMode.login;
   bool get isLogin => authMode == AuthMode.login;
   bool get isSignup => authMode == AuthMode.signup;
 
@@ -19,23 +21,27 @@ class _AuthFormState extends State<AuthForm> {
   final passwordController = TextEditingController();
   final authFormKey = GlobalKey<FormState>();
 
-  void submitForm() {
-    final formState = authFormKey.currentState;
-    if (formState!.validate()) {
-      setState(() => isLoading = true);
-      formState.save();
-
-      if (isLogin) {
-      } else {}
-
-      setState(() => isLoading = false);
-    }
-  }
-
   bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    Future<void> submitForm() async {
+      final formState = authFormKey.currentState;
+      if (formState!.validate()) {
+        setState(() => isLoading = true);
+        formState.save();
+
+        final AuthProvider authProvider = context.read<AuthProvider>();
+        if (isLogin) {
+          await authProvider.login(formData);
+        } else {
+          await authProvider.signup(formData);
+        }
+
+        setState(() => isLoading = false);
+      }
+    }
+
     final ThemeData theme = Theme.of(context);
     final ColorScheme colorScheme = theme.colorScheme;
     final deviceWidth = MediaQuery.of(context).size.width;

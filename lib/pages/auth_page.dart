@@ -34,7 +34,8 @@ class AuthPage extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(15),
-                    transform: Matrix4.rotationZ(-4 * pi / 180)..translate(-5),
+                    transform: Matrix4.rotationZ(-4 * pi / 180)
+                      ..translate(-5.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: colorScheme.primary.withOpacity(.75),
