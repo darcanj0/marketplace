@@ -17,9 +17,9 @@ class ProductListProvider extends DbProvider
   Future<void> loadProducts() async {
     _products.clear();
 
-    final snapshot = await readRef.get();
-    if (snapshot.exists) {
-      try {
+    try {
+      final snapshot = await readRef.get();
+      if (snapshot.exists) {
         final dynamic productsData = snapshot.value;
         productsData.forEach((id, productData) {
           final Product loadedProduct = Product(
@@ -32,13 +32,14 @@ class ProductListProvider extends DbProvider
           );
           _products.add(loadedProduct);
         });
-      } catch (e) {
-        throw AppHttpException(
-            statusCode: 400, msg: 'An error occurred when loading products');
+      } else {
+        throw AppHttpException(statusCode: 400, msg: 'No products found');
       }
-    } else {
-      throw AppHttpException(statusCode: 400, msg: 'No products found');
+    } catch (e) {
+      throw AppHttpException(
+          statusCode: 400, msg: 'An error occurred when loading products');
     }
+
     notifyListeners();
   }
 

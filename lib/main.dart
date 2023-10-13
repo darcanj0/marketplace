@@ -88,19 +88,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.nunitoTextTheme(originalTextTheme),
         useMaterial3: true,
       ),
-      home: Consumer<AuthProvider>(
-        builder: (context, value, child) {
-          return StreamBuilder<User?>(
-            stream: value.firebase.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return const HomePage();
-              }
-              return const AuthPage();
-            },
-          );
-        },
-      ),
+      home: HomePage(),
       routes: {
         AppRoutes.home.name: (context) => const HomePage(),
         AppRoutes.productDetails.name: (context) => const ProductDetailsPage(),
