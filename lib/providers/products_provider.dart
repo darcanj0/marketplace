@@ -1,11 +1,21 @@
+import 'package:clothing/constants/server.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/providers/db_provider.dart';
 import 'package:clothing/model/product.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 
 class ProductListProvider extends DbProvider
     with ChangeNotifier, DiagnosticableTreeMixin {
-  ProductListProvider({required super.dbPath});
+  ProductListProvider({super.dbPath = DbPaths.products});
+
+  static const userFavoritesPath = DbPaths.userFavorites;
+
+  DatabaseReference get usersFavoritesRef {
+    return instance.ref('${userFavoritesPath.name}/$userId');
+  }
+
+  String userId = '';
 
   final List<Product> _products = [];
 
@@ -17,27 +27,26 @@ class ProductListProvider extends DbProvider
   Future<void> loadProducts() async {
     _products.clear();
 
-    try {
-      final snapshot = await readRef.get();
-      if (snapshot.exists) {
-        final dynamic productsData = snapshot.value;
-        productsData.forEach((id, productData) {
-          final Product loadedProduct = Product(
-            id: id,
-            title: productData['title'] as String,
-            description: productData['description'] as String,
-            price: double.parse(productData['price'] as String),
-            imageUrl: productData['imageUrl'] as String,
-            isFavorite: bool.parse(productData['isFavorite']),
-          );
-          _products.add(loadedProduct);
-        });
-      } else {
-        throw AppHttpException(statusCode: 400, msg: 'No products found');
-      }
-    } catch (e) {
-      throw AppHttpException(
-          statusCode: 400, msg: 'An error occurred when loading products');
+    final snapshot = await readRef.get();
+    final favoritesSnapshot = await usersFavoritesRef.get();
+
+    if (snapshot.exists) {
+      final dynamic favData = favoritesSnapshot.value;
+      final dynamic productsData = snapshot.value;
+      productsData.forEach((id, productData) {
+        final Product loadedProduct = Product(
+          id: id,
+          title: productData['title'] as String,
+          description: productData['description'] as String,
+          price: double.parse(productData['price'] as String),
+          imageUrl: productData['imageUrl'] as String,
+          isFavorite:
+              favData == null ? false : bool.parse((favData[id] ?? 'false')),
+        );
+        _products.add(loadedProduct);
+      });
+    } else {
+      throw AppHttpException(statusCode: 400, msg: 'No products found');
     }
 
     notifyListeners();
@@ -81,7 +90,6 @@ class ProductListProvider extends DbProvider
       final String imageUrl = productData['imageUrl'] as String;
       final String description = productData['description'] as String;
       final double price = double.parse(productData['price'] as String);
-      final bool isFavorite = (productData['isFavorite'] ?? false) as bool;
 
       final String createdId = idGenerator.newId();
       try {
@@ -90,7 +98,6 @@ class ProductListProvider extends DbProvider
           'description': description,
           'price': price.toStringAsFixed(2), //two decimal
           'imageUrl': imageUrl,
-          'isFavorite': isFavorite.toString(),
         });
       } catch (e) {
         throw AppHttpException(

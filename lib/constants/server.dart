@@ -8,4 +8,4 @@ class ServerConstants {
       '${collection.name}/$id';
 }
 
-enum DbPaths { products, orders }
+enum DbPaths { products, orders, userFavorites }

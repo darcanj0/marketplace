@@ -23,6 +23,12 @@ class _AuthFormState extends State<AuthForm> {
   final passwordController = TextEditingController();
   final authFormKey = GlobalKey<FormState>();
 
+  @override
+  void dispose() {
+    passwordController.dispose();
+    super.dispose();
+  }
+
   bool isLoading = false;
 
   @override

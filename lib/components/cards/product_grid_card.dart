@@ -3,6 +3,7 @@ import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/model/product.dart';
 import 'package:clothing/constants/app_routes.dart';
+import 'package:clothing/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -63,20 +64,25 @@ class ProductGridCard extends StatelessWidget {
             ),
             Positioned(
               child: Consumer<Product>(
-                builder: (context, value, child) => IconButton(
-                  onPressed: () {
-                    value.toggleFavorite().catchError(
-                          (err) => ExceptionFeedbackHandler.withSnackbar(
-                              context, err),
-                          test: (error) => error is AppHttpException,
-                        );
-                  },
-                  icon: Icon(
-                    value.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border_outlined,
-                    size: iconSize,
-                    color: colorScheme.primary,
+                builder: (_, prod, __) => Consumer<AuthProvider>(
+                  builder: (context, authProvider, __) => IconButton(
+                    onPressed: () {
+                      prod
+                          .toggleFavorite(
+                              authProvider.firebase.currentUser?.uid ?? '')
+                          .catchError(
+                            (err) => ExceptionFeedbackHandler.withSnackbar(
+                                context, err),
+                            test: (error) => error is AppHttpException,
+                          );
+                    },
+                    icon: Icon(
+                      prod.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border_outlined,
+                      size: iconSize,
+                      color: colorScheme.primary,
+                    ),
                   ),
                 ),
               ),

@@ -19,7 +19,7 @@ class Product extends DbProvider with ChangeNotifier {
     required this.price,
     required this.imageUrl,
     this.isFavorite = false,
-    super.dbPath = DbPaths.products,
+    super.dbPath = DbPaths.userFavorites,
   });
 
   void _toggleFavorite() {
@@ -27,11 +27,11 @@ class Product extends DbProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String userId) async {
     _toggleFavorite();
 
     try {
-      await getReferenceFrom(id).update({'isFavorite': isFavorite.toString()});
+      await getReferenceFrom(userId).update({id: isFavorite.toString()});
     } catch (e) {
       _toggleFavorite();
       throw AppHttpException(

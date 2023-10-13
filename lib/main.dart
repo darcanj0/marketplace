@@ -11,7 +11,6 @@ import 'package:clothing/pages/product_form_page.dart';
 import 'package:clothing/pages/home_page.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/constants/app_routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,11 +23,17 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        Provider(
-          create: (context) => AuthProvider(),
-        ),
         ChangeNotifierProvider(
-            create: (_) => ProductListProvider(dbPath: DbPaths.products)),
+          create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, ProductListProvider>(
+          create: (context) => ProductListProvider(),
+          update: (_, authProvider, previous) {
+            final provider = ProductListProvider();
+            provider.userId = authProvider.userId;
+            return provider;
+          },
+        ),
         ChangeNotifierProvider(create: (_) => Cart()),
         ChangeNotifierProvider(
             create: (_) => OrderListProvider(dbPath: DbPaths.orders))

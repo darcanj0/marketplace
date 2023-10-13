@@ -1,12 +1,15 @@
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class AuthProvider {
+class AuthProvider with ChangeNotifier {
   AuthProvider();
 
   final FirebaseAuth _firebase = FirebaseAuth.instance;
 
   FirebaseAuth get firebase => _firebase;
+
+  String userId = '';
 
   Future<void> login(Map<String, String> userData) async {
     try {
@@ -15,6 +18,8 @@ class AuthProvider {
         email: userData['email'] as String,
         password: userData['password'] as String,
       );
+      userId = credentials.user?.uid ?? '';
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         throw AppHttpException(
@@ -37,6 +42,8 @@ class AuthProvider {
       );
       if (credentials.user == null) return;
       await credentials.user!.sendEmailVerification();
+      userId = credentials.user?.uid ?? '';
+      notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         throw AppHttpException(
