@@ -29,13 +29,13 @@ class ManageProductList extends StatelessWidget {
         onRefresh: () => productList.loadProducts().catchError(
             (err) => ExceptionFeedbackHandler.withDialog(context, err)),
         child: ListView.builder(
+          itemCount: productList.products.length,
           itemBuilder: (ctx, index) => Column(
             children: [
               ManageProductCard(product: productList.products[index]),
               const Divider()
             ],
           ),
-          itemCount: productList.products.length,
         ),
       ),
     );
