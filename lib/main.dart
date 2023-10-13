@@ -30,7 +30,7 @@ Future<void> main() async {
           create: (context) => ProductListProvider(),
           update: (_, authProvider, previous) {
             final provider = ProductListProvider();
-            provider.userId = authProvider.userId;
+            provider.userId = authProvider.firebase.currentUser?.uid ?? '';
             return provider;
           },
         ),
@@ -39,7 +39,7 @@ Future<void> main() async {
           create: (_) => OrderListProvider(),
           update: (_, authProvider, previous) {
             final provider = OrderListProvider();
-            provider.userId = authProvider.userId;
+            provider.userId = authProvider.firebase.currentUser?.uid ?? '';
             return provider;
           },
         )

@@ -9,8 +9,6 @@ class AuthProvider with ChangeNotifier {
 
   FirebaseAuth get firebase => _firebase;
 
-  String userId = '';
-
   Future<void> login(Map<String, String> userData) async {
     try {
       final credentials =
@@ -18,7 +16,6 @@ class AuthProvider with ChangeNotifier {
         email: userData['email'] as String,
         password: userData['password'] as String,
       );
-      userId = credentials.user?.uid ?? '';
       notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
@@ -42,7 +39,6 @@ class AuthProvider with ChangeNotifier {
       );
       if (credentials.user == null) return;
       await credentials.user!.sendEmailVerification();
-      userId = credentials.user?.uid ?? '';
       notifyListeners();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
