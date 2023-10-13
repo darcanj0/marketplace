@@ -1,4 +1,4 @@
-import 'package:clothing/constants/server.dart';
+import 'package:clothing/helpers/id_gen_adapter.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/pages/auth_page.dart';
 import 'package:clothing/providers/auth_provider.dart';
@@ -34,9 +34,15 @@ Future<void> main() async {
             return provider;
           },
         ),
-        ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(
-            create: (_) => OrderListProvider(dbPath: DbPaths.orders))
+        ChangeNotifierProvider(create: (_) => Cart(idAdapter: UUIDAdapter())),
+        ChangeNotifierProxyProvider<AuthProvider, OrderListProvider>(
+          create: (_) => OrderListProvider(),
+          update: (_, authProvider, previous) {
+            final provider = OrderListProvider();
+            provider.userId = authProvider.userId;
+            return provider;
+          },
+        )
       ],
       child: const MyApp(),
     ),

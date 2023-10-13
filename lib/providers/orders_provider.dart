@@ -1,3 +1,4 @@
+import 'package:clothing/constants/server.dart';
 import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/model/cart.dart';
 import 'package:clothing/model/order.dart';
@@ -5,7 +6,9 @@ import 'package:clothing/providers/db_provider.dart';
 import 'package:flutter/material.dart';
 
 class OrderListProvider extends DbProvider with ChangeNotifier {
-  OrderListProvider({required super.dbPath});
+  OrderListProvider({super.dbPath = DbPaths.orders});
+  String userId = '';
+
   final List<Order> _orders = [];
 
   List<Order> get orders => [..._orders];
@@ -15,20 +18,22 @@ class OrderListProvider extends DbProvider with ChangeNotifier {
     final orderedAt = DateTime.now();
     final String createdId = idGenerator.newId();
     try {
-      await getReferenceFrom(createdId).set({
-        'itemsCount': cart.itemsCount.toString(),
-        'totalPrice': cart.totalPrice.toStringAsFixed(2),
-        'orderedAt': orderedAt.toIso8601String(),
-        'items': cart.items.values
-            .map<Map<String, String>>((cartItem) => {
-                  'id': cartItem.id,
-                  'productId': cartItem.productId,
-                  'unitPrice': cartItem.price.toStringAsFixed(2),
-                  'title': cartItem.productTitle,
-                  'quantity': cartItem.quantity.toString(),
-                  'imageUrl': cartItem.imageUrl
-                })
-            .toList()
+      await getReferenceFrom(userId).set({
+        createdId: {
+          'itemsCount': cart.itemsCount.toString(),
+          'totalPrice': cart.totalPrice.toStringAsFixed(2),
+          'orderedAt': orderedAt.toIso8601String(),
+          'items': cart.items.values
+              .map<Map<String, String>>((cartItem) => {
+                    'id': cartItem.id,
+                    'productId': cartItem.productId,
+                    'unitPrice': cartItem.price.toStringAsFixed(2),
+                    'title': cartItem.productTitle,
+                    'quantity': cartItem.quantity.toString(),
+                    'imageUrl': cartItem.imageUrl
+                  })
+              .toList()
+        }
       });
     } catch (e) {
       throw AppHttpException(
@@ -48,13 +53,12 @@ class OrderListProvider extends DbProvider with ChangeNotifier {
   }
 
   Future<void> loadOrders() async {
-    final snapshot = await readRef.get();
-
+    final snapshot = await getReferenceFrom(userId).get();
+    _orders.clear();
     if (snapshot.exists) {
-      _orders.clear();
       try {
-        final dynamic ordersData = snapshot.value;
-        ordersData.forEach((id, orderData) {
+        final dynamic loadedData = snapshot.value ?? {};
+        loadedData.forEach((orderId, orderData) {
           final List<CartItem> orderItems = [];
           (orderData['items']).forEach((itemData) {
             final CartItem item = CartItem(
@@ -68,7 +72,7 @@ class OrderListProvider extends DbProvider with ChangeNotifier {
             orderItems.add(item);
           });
           final Order loadedOrder = Order(
-            id: id,
+            id: orderId,
             orderedAt: DateTime.parse(orderData['orderedAt']),
             totalPrice: double.parse(orderData['totalPrice']),
             items: orderItems,

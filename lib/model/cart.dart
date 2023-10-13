@@ -1,9 +1,10 @@
-import 'dart:math';
-
+import 'package:clothing/helpers/id_gen_adapter.dart';
 import 'package:clothing/model/product.dart';
 import 'package:flutter/material.dart';
 
 class Cart with ChangeNotifier {
+  final IIdGen idAdapter;
+
   Map<String, CartItem> _items = {};
 
   Map<String, CartItem> get items => {..._items};
@@ -33,7 +34,7 @@ class Cart with ChangeNotifier {
       _items.putIfAbsent(
         product.id,
         () => CartItem(
-          id: Random().nextDouble().toString(),
+          id: idAdapter.newId(),
           productId: product.id,
           productTitle: product.title,
           price: product.price,
@@ -71,7 +72,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  Cart();
+  Cart({required this.idAdapter});
 }
 
 class CartItem {
