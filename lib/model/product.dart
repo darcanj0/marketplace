@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:clothing/constants/server.dart';
+import 'package:clothing/providers/db_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../helpers/http_exception.dart';
 
-class Product with ChangeNotifier {
+class Product extends DbProvider with ChangeNotifier {
   final String id;
   final String title;
   final String description;
@@ -14,13 +12,15 @@ class Product with ChangeNotifier {
   final String imageUrl;
   bool isFavorite;
 
-  Product(
-      {required this.id,
-      required this.title,
-      required this.description,
-      required this.price,
-      required this.imageUrl,
-      this.isFavorite = false});
+  Product({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.imageUrl,
+    this.isFavorite = false,
+    super.dbPath = DbPaths.products,
+  });
 
   void _toggleFavorite() {
     isFavorite = !isFavorite;
@@ -30,14 +30,9 @@ class Product with ChangeNotifier {
   Future<void> toggleFavorite() async {
     _toggleFavorite();
 
-    final response = await http.patch(
-      Uri.https(ServerConstants.domain,
-          ServerConstants.updateAndDeletePath(DbPaths.products, id)),
-      body: jsonEncode({
-        'isFavorite': isFavorite.toString(),
-      }),
-    );
-    if (response.statusCode >= 400) {
+    try {
+      await getReferenceFrom(id).update({'isFavorite': isFavorite.toString()});
+    } catch (e) {
       _toggleFavorite();
       throw AppHttpException(
           statusCode: 400,
