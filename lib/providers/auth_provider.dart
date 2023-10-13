@@ -16,19 +16,15 @@ class AuthProvider {
         password: userData['password'] as String,
       );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
+      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         throw AppHttpException(
-          msg: 'The password provided is too weak.',
+          msg: 'Invalid Password',
           statusCode: 400,
         );
-      } else if (e.code == 'email-already-in-use') {
+      } else {
         throw AppHttpException(
-          msg: 'The account already exists for that email.',
-          statusCode: 400,
-        );
+            statusCode: 400, msg: 'An unknown error occurred');
       }
-    } catch (e) {
-      throw AppHttpException(statusCode: 400, msg: 'An unknown error occurred');
     }
   }
 
@@ -42,19 +38,15 @@ class AuthProvider {
       if (credentials.user == null) return;
       await credentials.user!.sendEmailVerification();
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+      if (e.code == 'email-already-in-use') {
         throw AppHttpException(
-          msg: 'No user found for that email.',
-          statusCode: 401,
+          msg: 'This email already has an account',
+          statusCode: 400,
         );
-      } else if (e.code == 'wrong-password') {
+      } else {
         throw AppHttpException(
-          msg: 'Wrong password provided for that user.',
-          statusCode: 401,
-        );
+            statusCode: 400, msg: 'An unknown error occurred');
       }
-    } catch (e) {
-      throw AppHttpException(statusCode: 400, msg: 'An unknown error occurred');
     }
   }
 

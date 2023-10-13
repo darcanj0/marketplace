@@ -1,3 +1,5 @@
+import 'package:clothing/helpers/exception_feedback_handler.dart';
+import 'package:clothing/helpers/http_exception.dart';
 import 'package:clothing/helpers/string_validation.dart';
 import 'package:clothing/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +35,17 @@ class _AuthFormState extends State<AuthForm> {
 
         final AuthProvider authProvider = context.read<AuthProvider>();
         if (isLogin) {
-          await authProvider.login(formData);
+          try {
+            await authProvider.login(formData);
+          } on AppHttpException catch (err) {
+            await ExceptionFeedbackHandler.withSnackbar(context, err);
+          }
         } else {
-          await authProvider.signup(formData);
+          try {
+            await authProvider.signup(formData);
+          } on AppHttpException catch (err) {
+            await ExceptionFeedbackHandler.withSnackbar(context, err);
+          }
         }
 
         setState(() => isLoading = false);
