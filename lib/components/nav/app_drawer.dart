@@ -37,7 +37,10 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Sign Out'),
-            onTap: () => context.read<AuthProvider>().signout(),
+            onTap: () async {
+              navigateToReplacing(context, AppRoutes.home);
+              await context.read<AuthProvider>().signout();
+            },
           ),
         ],
       ),

@@ -8,7 +8,6 @@ import 'package:clothing/pages/manage_products_page.dart';
 import 'package:clothing/pages/orders_page.dart';
 import 'package:clothing/pages/product_details_page.dart';
 import 'package:clothing/pages/product_form_page.dart';
-import 'package:clothing/pages/home_page.dart';
 import 'package:clothing/providers/products_provider.dart';
 import 'package:clothing/constants/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'pages/auth_or_home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -99,21 +99,9 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.nunitoTextTheme(originalTextTheme),
         useMaterial3: true,
       ),
-      home: Consumer<AuthProvider>(
-        builder: (context, value, child) {
-          return StreamBuilder(
-            stream: value.firebase.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return const HomePage();
-              }
-              return const AuthPage();
-            },
-          );
-        },
-      ),
+      home: const AuthOrHome(),
       routes: {
-        AppRoutes.home.name: (context) => const HomePage(),
+        AppRoutes.home.name: (context) => const AuthOrHome(),
         AppRoutes.productDetails.name: (context) => const ProductDetailsPage(),
         AppRoutes.cart.name: (context) => const CartPage(),
         AppRoutes.orders.name: (context) => const OrdersPage(),
