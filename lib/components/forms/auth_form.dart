@@ -14,16 +14,53 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends State<AuthForm>
+    with SingleTickerProviderStateMixin {
   AuthMode authMode = AuthMode.login;
   bool get isLogin => authMode == AuthMode.login;
   bool get isSignup => authMode == AuthMode.signup;
+
+  void toggleAuthMode() {
+    setState(() {
+      if (isLogin) {
+        authMode = AuthMode.signup;
+        animationController.forward();
+      } else {
+        authMode = AuthMode.login;
+        animationController.reverse();
+      }
+    });
+  }
 
   Map<String, String> formData = {'email': '', 'password': ''};
   final passwordController = TextEditingController();
   final authFormKey = GlobalKey<FormState>();
 
   bool isLoading = false;
+
+  late AnimationController animationController;
+  late Animation<Size> heightAnimation;
+
+  @override
+  void initState() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+    heightAnimation = Tween<Size>(
+            begin: const Size(double.infinity, 350),
+            end: const Size(double.infinity, 430))
+        .animate(
+            CurvedAnimation(parent: animationController, curve: Curves.easeIn));
+    heightAnimation.addListener(() => setState(() {}));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +94,8 @@ class _AuthFormState extends State<AuthForm> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8,
       child: Container(
-        height: isLogin ? 350 : 430,
+        // height: isLogin ? 350 : 430,
+        height: heightAnimation.value.height,
         width: deviceWidth * 0.75,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Form(
@@ -136,9 +174,7 @@ class _AuthFormState extends State<AuthForm> {
                   height: 30,
                 ),
                 TextButton(
-                  onPressed: () => setState(() => isLogin
-                      ? authMode = AuthMode.signup
-                      : authMode = AuthMode.login),
+                  onPressed: toggleAuthMode,
                   child:
                       Text(isLogin ? 'New user?' : 'Already have an account?'),
                 )
