@@ -20,8 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     setState(() => isLoading = true);
     context
         .read<ProductListProvider>()
@@ -33,6 +32,7 @@ class _HomePageState extends State<HomePage> {
         .then((_) {
       setState(() => isLoading = false);
     });
+    super.didChangeDependencies();
   }
 
   bool isLoading = false;

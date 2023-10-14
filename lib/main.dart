@@ -29,9 +29,8 @@ Future<void> main() async {
         ChangeNotifierProxyProvider<AuthProvider, ProductListProvider>(
           create: (context) => ProductListProvider(),
           update: (_, authProvider, previous) {
-            final provider = ProductListProvider();
-            provider.userId = authProvider.firebase.currentUser?.uid ?? '';
-            return provider;
+            previous?.userId = authProvider.firebase.currentUser?.uid ?? '';
+            return previous as ProductListProvider;
           },
         ),
         ChangeNotifierProvider(create: (_) => Cart(idAdapter: UUIDAdapter())),

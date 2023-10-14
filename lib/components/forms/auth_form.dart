@@ -23,12 +23,6 @@ class _AuthFormState extends State<AuthForm> {
   final passwordController = TextEditingController();
   final authFormKey = GlobalKey<FormState>();
 
-  @override
-  void dispose() {
-    passwordController.dispose();
-    super.dispose();
-  }
-
   bool isLoading = false;
 
   @override
@@ -53,8 +47,6 @@ class _AuthFormState extends State<AuthForm> {
             await ExceptionFeedbackHandler.withSnackbar(context, err);
           }
         }
-
-        setState(() => isLoading = false);
       }
     }
 
@@ -65,7 +57,7 @@ class _AuthFormState extends State<AuthForm> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8,
       child: Container(
-        height: isLogin ? 350 : 400,
+        height: isLogin ? 350 : 430,
         width: deviceWidth * 0.75,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Form(
