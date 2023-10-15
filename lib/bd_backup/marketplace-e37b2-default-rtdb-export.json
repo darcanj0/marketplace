@@ -1,0 +1,214 @@
+{
+  "orders": {
+    "AJuxpFERlPbR9PKN6jQFZh9Ynjj2": {
+      "4fcff1f8-c9b6-4980-b750-60f96b4dd32b": {
+        "items": [
+          {
+            "id": "ab4bb047-c717-4e4a-8403-29ba6c3466bd",
+            "imageUrl": "https://m.media-amazon.com/images/I/81yPAojLoxL._AC_UL320_.jpg",
+            "productId": "2d9ecc24-7d26-4e50-bc34-d870d3cd3b7a",
+            "quantity": "1",
+            "title": "Leather Wallet For Men",
+            "unitPrice": "24.99"
+          },
+          {
+            "id": "a3bcc00f-0954-46a3-898f-790444152e9a",
+            "imageUrl": "https://m.media-amazon.com/images/I/71JXtHV4AsL._AC_SX569_.jpg",
+            "productId": "fd51f16b-3950-41a2-a6ec-7846cee78730",
+            "quantity": "1",
+            "title": "Blue Dress",
+            "unitPrice": "39.99"
+          },
+          {
+            "id": "bfeeecd3-b0b6-4c80-9827-9d04f49a1c25",
+            "imageUrl": "https://m.media-amazon.com/images/I/71RiiEL5XkL._AC_SX575_.jpg",
+            "productId": "9d617149-fe4b-4be0-8a35-fd8a8b3062a5",
+            "quantity": "1",
+            "title": "Running Shoes",
+            "unitPrice": "79.99"
+          },
+          {
+            "id": "f776b3ee-937c-4164-abd4-88d88456360f",
+            "imageUrl": "https://m.media-amazon.com/images/I/71VEeIkehCL._AC_UL320_.jpg",
+            "productId": "0ddf1361-9251-41b0-8787-20c96f3d3a59",
+            "quantity": "1",
+            "title": "Headphones Razer",
+            "unitPrice": "34.99"
+          }
+        ],
+        "itemsCount": "4",
+        "orderedAt": "2023-10-15T13:51:10.253882",
+        "totalPrice": "179.96"
+      }
+    },
+    "r87wPW3bElZ5SXDMlZn2wjKNJ6J3": {
+      "7bf71f20-6874-43eb-bd29-6c0842e8bf36": {
+        "items": [
+          {
+            "id": "624a7b56-ae6f-4794-b12b-2c040f85958f",
+            "imageUrl": "https://m.media-amazon.com/images/I/71VEeIkehCL._AC_UL320_.jpg",
+            "productId": "0ddf1361-9251-41b0-8787-20c96f3d3a59",
+            "quantity": "10",
+            "title": "Headphones Razer",
+            "unitPrice": "34.99"
+          },
+          {
+            "id": "29d672cf-468e-43f8-a676-fc383ccde030",
+            "imageUrl": "https://m.media-amazon.com/images/I/71JXtHV4AsL._AC_SX569_.jpg",
+            "productId": "fd51f16b-3950-41a2-a6ec-7846cee78730",
+            "quantity": "3",
+            "title": "Blue Dress",
+            "unitPrice": "39.99"
+          }
+        ],
+        "itemsCount": "2",
+        "orderedAt": "2023-10-15T15:09:12.579",
+        "totalPrice": "469.87"
+      }
+    },
+    "t4YdEfP5KwYj6Y16WMlkHBvXBdi2": {
+      "daaa3535-d1f4-4075-bc0b-1132810cff57": {
+        "items": [
+          {
+            "id": "1c85b30b-f74e-4314-b707-1a7693dbf5b1",
+            "imageUrl": "https://m.media-amazon.com/images/I/71VEeIkehCL._AC_UL320_.jpg",
+            "productId": "0ddf1361-9251-41b0-8787-20c96f3d3a59",
+            "quantity": "1",
+            "title": "Headphones Razer",
+            "unitPrice": "34.99"
+          },
+          {
+            "id": "383f302e-ad9f-4a92-9d24-94dd31a852e1",
+            "imageUrl": "https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg",
+            "productId": "7c912939-adc1-48c4-a150-7ec579655281",
+            "quantity": "1",
+            "title": "Red Shirt",
+            "unitPrice": "29.99"
+          }
+        ],
+        "itemsCount": "2",
+        "orderedAt": "2023-10-13T19:14:11.701",
+        "totalPrice": "64.98"
+      }
+    },
+    "uoBKC1PtlLYBKxxFXrWc2WAbPX73": {
+      "f07ee373-be44-4df8-85c8-e67f302f7abe": {
+        "items": [
+          {
+            "id": "a2308886-6ef4-4356-874d-3e46cc38ed8f",
+            "imageUrl": "https://m.media-amazon.com/images/I/71VEeIkehCL._AC_UL320_.jpg",
+            "productId": "0ddf1361-9251-41b0-8787-20c96f3d3a59",
+            "quantity": "1",
+            "title": "Headphones",
+            "unitPrice": "129.99"
+          },
+          {
+            "id": "0b4cf63e-e9c3-495e-bd9c-3f7dbf9e4f98",
+            "imageUrl": "https://m.media-amazon.com/images/I/81yPAojLoxL._AC_UL320_.jpg",
+            "productId": "2d9ecc24-7d26-4e50-bc34-d870d3cd3b7a",
+            "quantity": "1",
+            "title": "Leather Wallet",
+            "unitPrice": "24.99"
+          },
+          {
+            "id": "9bced32b-5d82-45ec-83c0-2abc1ac6bce7",
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg",
+            "productId": "abe78411-413f-453b-bad9-67e277efd3b1",
+            "quantity": "2",
+            "title": "Trousers",
+            "unitPrice": "59.99"
+          }
+        ],
+        "itemsCount": "3",
+        "orderedAt": "2023-10-13T22:07:12.307157",
+        "totalPrice": "274.96"
+      }
+    }
+  },
+  "products": {
+    "0ddf1361-9251-41b0-8787-20c96f3d3a59": {
+      "description": "High-quality headphones for music lovers.",
+      "imageUrl": "https://m.media-amazon.com/images/I/71VEeIkehCL._AC_UL320_.jpg",
+      "price": "34.99",
+      "title": "Headphones Razer"
+    },
+    "2d9ecc24-7d26-4e50-bc34-d870d3cd3b7a": {
+      "description": "A stylish leather wallet with multiple card slots.",
+      "imageUrl": "https://m.media-amazon.com/images/I/81yPAojLoxL._AC_UL320_.jpg",
+      "price": "24.99",
+      "title": "Leather Wallet For Men"
+    },
+    "39b8d9a3-6600-4f40-966a-de2daa45aafa": {
+      "description": "Warm and cozy - exactly what you need for the winter.",
+      "imageUrl": "https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg",
+      "price": "19.99",
+      "title": "Yellow Scarf"
+    },
+    "7c912939-adc1-48c4-a150-7ec579655281": {
+      "description": "A red shirt - it is pretty red!",
+      "imageUrl": "https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg",
+      "price": "29.99",
+      "title": "Red Shirt"
+    },
+    "95a3b18d-9597-44ad-969b-cd5ffadd76fc": {
+      "description": "Prepare any meal you want.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg",
+      "price": "49.99",
+      "title": "A Pan"
+    },
+    "9d617149-fe4b-4be0-8a35-fd8a8b3062a5": {
+      "description": "Comfortable shoes for your daily runs.",
+      "imageUrl": "https://m.media-amazon.com/images/I/71RiiEL5XkL._AC_SX575_.jpg",
+      "price": "79.99",
+      "title": "Running Shoes"
+    },
+    "abe78411-413f-453b-bad9-67e277efd3b1": {
+      "description": "A nice pair of trousers.",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg",
+      "price": "59.99",
+      "title": "Trousers"
+    },
+    "af6bcf05-a54b-477c-b8b2-644d1e6dcf2a": {
+      "description": "Shorts meant for sports",
+      "imageUrl": "https://m.media-amazon.com/images/I/41YiFFDrQEL._AC_SX569_.jpg",
+      "price": "12.99",
+      "title": "Shorts"
+    },
+    "f301684b-c71c-4d85-b5e5-6652ddced54d": {
+      "description": "Brew your favorite coffee with this stylish machine.",
+      "imageUrl": "https://m.media-amazon.com/images/I/41aguIvkgKL.__AC_SX300_SY300_QL70_ML2_.jpg",
+      "price": "89.99",
+      "title": "Coffee Maker"
+    },
+    "fd51f16b-3950-41a2-a6ec-7846cee78730": {
+      "description": "A beautiful blue dress for special occasions.",
+      "imageUrl": "https://m.media-amazon.com/images/I/71JXtHV4AsL._AC_SX569_.jpg",
+      "price": "39.99",
+      "title": "Blue Dress"
+    }
+  },
+  "userFavorites": {
+    "AJuxpFERlPbR9PKN6jQFZh9Ynjj2": {
+      "0ddf1361-9251-41b0-8787-20c96f3d3a59": "true",
+      "fd51f16b-3950-41a2-a6ec-7846cee78730": "true"
+    },
+    "r87wPW3bElZ5SXDMlZn2wjKNJ6J3": {
+      "0ddf1361-9251-41b0-8787-20c96f3d3a59": "true",
+      "2d9ecc24-7d26-4e50-bc34-d870d3cd3b7a": "true",
+      "abe78411-413f-453b-bad9-67e277efd3b1": "true",
+      "fd51f16b-3950-41a2-a6ec-7846cee78730": "true"
+    },
+    "t4YdEfP5KwYj6Y16WMlkHBvXBdi2": {
+      "0ddf1361-9251-41b0-8787-20c96f3d3a59": "true",
+      "7c912939-adc1-48c4-a150-7ec579655281": "true"
+    },
+    "uoBKC1PtlLYBKxxFXrWc2WAbPX73": {
+      "0ddf1361-9251-41b0-8787-20c96f3d3a59": "true",
+      "2d9ecc24-7d26-4e50-bc34-d870d3cd3b7a": "true",
+      "39b8d9a3-6600-4f40-966a-de2daa45aafa": "true",
+      "af6bcf05-a54b-477c-b8b2-644d1e6dcf2a": "true",
+      "f301684b-c71c-4d85-b5e5-6652ddced54d": "true",
+      "fd51f16b-3950-41a2-a6ec-7846cee78730": "true"
+    }
+  }
+}

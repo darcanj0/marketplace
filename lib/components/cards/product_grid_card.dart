@@ -57,10 +57,19 @@ class ProductGridCard extends StatelessWidget {
           ),
           child: Stack(children: [
             Positioned.fill(
-              child: Ink.image(
-                image: NetworkImage(product.imageUrl),
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: product.id,
+                child: FadeInImage(
+                  image: NetworkImage(product.imageUrl),
+                  placeholder:
+                      const AssetImage('assets/images/missing_image.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
+              // child: Ink.image(
+              //   image: NetworkImage(product.imageUrl),
+              //   fit: BoxFit.cover,
+              // ),
             ),
             Positioned(
               child: Consumer<Product>(

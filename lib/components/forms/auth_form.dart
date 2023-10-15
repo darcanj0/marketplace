@@ -14,10 +14,44 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends State<AuthForm>
+    with SingleTickerProviderStateMixin {
   AuthMode authMode = AuthMode.login;
   bool get isLogin => authMode == AuthMode.login;
   bool get isSignup => authMode == AuthMode.signup;
+
+  late AnimationController opacityAnimationController;
+  late Animation<double> opacityAnimation;
+
+  @override
+  void initState() {
+    opacityAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+            parent: opacityAnimationController, curve: Curves.easeIn));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    opacityAnimationController.dispose();
+    super.dispose();
+  }
+
+  void toggleAuthMode() {
+    setState(() {
+      if (isLogin) {
+        authMode = AuthMode.signup;
+        opacityAnimationController.forward();
+      } else {
+        authMode = AuthMode.login;
+        opacityAnimationController.reverse();
+      }
+    });
+  }
 
   Map<String, String> formData = {'email': '', 'password': ''};
   final passwordController = TextEditingController();
@@ -38,12 +72,14 @@ class _AuthFormState extends State<AuthForm> {
           try {
             await authProvider.login(formData);
           } on AppHttpException catch (err) {
+            setState(() => isLoading = false);
             await ExceptionFeedbackHandler.withSnackbar(context, err);
           }
         } else {
           try {
             await authProvider.signup(formData);
           } on AppHttpException catch (err) {
+            setState(() => isLoading = false);
             await ExceptionFeedbackHandler.withSnackbar(context, err);
           }
         }
@@ -56,8 +92,11 @@ class _AuthFormState extends State<AuthForm> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8,
-      child: Container(
-        height: isLogin ? 350 : 430,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+        height: isLogin ? 350 : 435,
+        // height: heightAnimation.value.height,
         width: deviceWidth * 0.75,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Form(
@@ -97,23 +136,32 @@ class _AuthFormState extends State<AuthForm> {
                     labelText: 'Password',
                   ),
                 ),
-                if (isSignup)
-                  TextFormField(
-                    validator: (value) {
-                      if (isLogin) return null;
-                      final String confirmation = value ?? '';
-                      if (confirmation.isEmpty ||
-                          confirmation != passwordController.text) {
-                        return "Passwords don't match";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
+                AnimatedContainer(
+                  constraints: BoxConstraints(
+                      minHeight: isLogin ? 0 : 60,
+                      maxHeight: isLogin ? 0 : 120),
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                  child: FadeTransition(
+                    opacity: opacityAnimation,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (isLogin) return null;
+                        final String confirmation = value ?? '';
+                        if (confirmation.isEmpty ||
+                            confirmation != passwordController.text) {
+                          return "Passwords don't match";
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Confirm Password',
+                      ),
                     ),
                   ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -136,9 +184,7 @@ class _AuthFormState extends State<AuthForm> {
                   height: 30,
                 ),
                 TextButton(
-                  onPressed: () => setState(() => isLogin
-                      ? authMode = AuthMode.signup
-                      : authMode = AuthMode.login),
+                  onPressed: toggleAuthMode,
                   child:
                       Text(isLogin ? 'New user?' : 'Already have an account?'),
                 )

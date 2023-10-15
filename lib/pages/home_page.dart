@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:clothing/components/nav/app_drawer.dart';
 import 'package:clothing/helpers/exception_feedback_handler.dart';
 import 'package:clothing/helpers/http_exception.dart';
@@ -22,21 +20,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void didChangeDependencies() {
+  void initState() {
     setState(() => isLoading = true);
-    Timer(Duration(seconds: 1), () {
-      context
-          .read<ProductListProvider>()
-          .loadProducts()
-          .catchError(
-            (err) => ExceptionFeedbackHandler.withDialog(context, err),
-            test: (error) => error is AppHttpException,
-          )
-          .then((_) {
-        setState(() => isLoading = false);
-      });
+    context
+        .read<ProductListProvider>()
+        .loadProducts()
+        .catchError(
+          (err) => ExceptionFeedbackHandler.withDialog(context, err),
+          test: (error) => error is AppHttpException,
+        )
+        .then((_) {
+      setState(() => isLoading = false);
     });
-    super.didChangeDependencies();
+    super.initState();
   }
 
   bool isLoading = false;
