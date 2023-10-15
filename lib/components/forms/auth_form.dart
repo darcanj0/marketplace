@@ -14,8 +14,7 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm>
-    with SingleTickerProviderStateMixin {
+class _AuthFormState extends State<AuthForm> {
   AuthMode authMode = AuthMode.login;
   bool get isLogin => authMode == AuthMode.login;
   bool get isSignup => authMode == AuthMode.signup;
@@ -24,10 +23,8 @@ class _AuthFormState extends State<AuthForm>
     setState(() {
       if (isLogin) {
         authMode = AuthMode.signup;
-        animationController.forward();
       } else {
         authMode = AuthMode.login;
-        animationController.reverse();
       }
     });
   }
@@ -37,29 +34,6 @@ class _AuthFormState extends State<AuthForm>
   final authFormKey = GlobalKey<FormState>();
 
   bool isLoading = false;
-
-  late AnimationController animationController;
-  late Animation<Size> heightAnimation;
-
-  @override
-  void initState() {
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-    );
-    heightAnimation = Tween<Size>(
-            begin: const Size(double.infinity, 350),
-            end: const Size(double.infinity, 430))
-        .animate(
-            CurvedAnimation(parent: animationController, curve: Curves.easeIn));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +66,13 @@ class _AuthFormState extends State<AuthForm>
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8,
-      child: AnimatedBuilder(
-        animation: heightAnimation,
-        builder: (ctx, child) => Container(
-          // height: isLogin ? 350 : 430,
-          height: heightAnimation.value.height,
-          width: deviceWidth * 0.75,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: child,
-        ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+        height: isLogin ? 350 : 430,
+        // height: heightAnimation.value.height,
+        width: deviceWidth * 0.75,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: Form(
             key: authFormKey,
             child: Column(
