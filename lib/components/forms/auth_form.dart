@@ -14,17 +14,41 @@ class AuthForm extends StatefulWidget {
   State<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends State<AuthForm>
+    with SingleTickerProviderStateMixin {
   AuthMode authMode = AuthMode.login;
   bool get isLogin => authMode == AuthMode.login;
   bool get isSignup => authMode == AuthMode.signup;
+
+  late AnimationController opacityAnimationController;
+  late Animation<double> opacityAnimation;
+
+  @override
+  void initState() {
+    opacityAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+            parent: opacityAnimationController, curve: Curves.easeIn));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    opacityAnimationController.dispose();
+    super.dispose();
+  }
 
   void toggleAuthMode() {
     setState(() {
       if (isLogin) {
         authMode = AuthMode.signup;
+        opacityAnimationController.forward();
       } else {
         authMode = AuthMode.login;
+        opacityAnimationController.reverse();
       }
     });
   }
@@ -110,23 +134,32 @@ class _AuthFormState extends State<AuthForm> {
                     labelText: 'Password',
                   ),
                 ),
-                if (isSignup)
-                  TextFormField(
-                    validator: (value) {
-                      if (isLogin) return null;
-                      final String confirmation = value ?? '';
-                      if (confirmation.isEmpty ||
-                          confirmation != passwordController.text) {
-                        return "Passwords don't match";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
+                AnimatedContainer(
+                  constraints: BoxConstraints(
+                      minHeight: isLogin ? 0 : 60,
+                      maxHeight: isLogin ? 0 : 120),
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.linear,
+                  child: FadeTransition(
+                    opacity: opacityAnimation,
+                    child: TextFormField(
+                      validator: (value) {
+                        if (isLogin) return null;
+                        final String confirmation = value ?? '';
+                        if (confirmation.isEmpty ||
+                            confirmation != passwordController.text) {
+                          return "Passwords don't match";
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Confirm Password',
+                      ),
                     ),
                   ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
