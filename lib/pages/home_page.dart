@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:clothing/components/nav/app_drawer.dart';
 import 'package:clothing/helpers/exception_feedback_handler.dart';
 import 'package:clothing/helpers/http_exception.dart';

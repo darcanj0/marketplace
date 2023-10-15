@@ -57,7 +57,8 @@ class ProductGridCard extends StatelessWidget {
           ),
           child: Stack(children: [
             Positioned.fill(
-              child: Ink(
+              child: Hero(
+                tag: product.id,
                 child: FadeInImage(
                   image: NetworkImage(product.imageUrl),
                   placeholder:
