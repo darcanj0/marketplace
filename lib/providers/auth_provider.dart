@@ -11,8 +11,7 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> login(Map<String, String> userData) async {
     try {
-      final credentials =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: userData['email'] as String,
         password: userData['password'] as String,
       );

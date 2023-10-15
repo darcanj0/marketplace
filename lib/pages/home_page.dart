@@ -24,17 +24,15 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     setState(() => isLoading = true);
-    Timer(const Duration(milliseconds: 500), () {
-      context
-          .read<ProductListProvider>()
-          .loadProducts()
-          .catchError(
-            (err) => ExceptionFeedbackHandler.withDialog(context, err),
-            test: (error) => error is AppHttpException,
-          )
-          .then((_) {
-        setState(() => isLoading = false);
-      });
+    context
+        .read<ProductListProvider>()
+        .loadProducts()
+        .catchError(
+          (err) => ExceptionFeedbackHandler.withDialog(context, err),
+          test: (error) => error is AppHttpException,
+        )
+        .then((_) {
+      setState(() => isLoading = false);
     });
     super.initState();
   }
