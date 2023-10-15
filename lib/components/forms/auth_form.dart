@@ -72,12 +72,14 @@ class _AuthFormState extends State<AuthForm>
           try {
             await authProvider.login(formData);
           } on AppHttpException catch (err) {
+            setState(() => isLoading = false);
             await ExceptionFeedbackHandler.withSnackbar(context, err);
           }
         } else {
           try {
             await authProvider.signup(formData);
           } on AppHttpException catch (err) {
+            setState(() => isLoading = false);
             await ExceptionFeedbackHandler.withSnackbar(context, err);
           }
         }
@@ -93,7 +95,7 @@ class _AuthFormState extends State<AuthForm>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
-        height: isLogin ? 350 : 430,
+        height: isLogin ? 350 : 435,
         // height: heightAnimation.value.height,
         width: deviceWidth * 0.75,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),

@@ -22,9 +22,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void didChangeDependencies() {
+  void initState() {
     setState(() => isLoading = true);
-    Timer(Duration(seconds: 1), () {
+    Timer(const Duration(milliseconds: 500), () {
       context
           .read<ProductListProvider>()
           .loadProducts()
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         setState(() => isLoading = false);
       });
     });
-    super.didChangeDependencies();
+    super.initState();
   }
 
   bool isLoading = false;
