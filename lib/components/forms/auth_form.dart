@@ -52,7 +52,6 @@ class _AuthFormState extends State<AuthForm>
             end: const Size(double.infinity, 430))
         .animate(
             CurvedAnimation(parent: animationController, curve: Curves.easeIn));
-    heightAnimation.addListener(() => setState(() {}));
     super.initState();
   }
 
@@ -93,11 +92,15 @@ class _AuthFormState extends State<AuthForm>
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 8,
-      child: Container(
-        // height: isLogin ? 350 : 430,
-        height: heightAnimation.value.height,
-        width: deviceWidth * 0.75,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      child: AnimatedBuilder(
+        animation: heightAnimation,
+        builder: (ctx, child) => Container(
+          // height: isLogin ? 350 : 430,
+          height: heightAnimation.value.height,
+          width: deviceWidth * 0.75,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+          child: child,
+        ),
         child: Form(
             key: authFormKey,
             child: Column(
