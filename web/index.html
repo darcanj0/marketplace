@@ -25,6 +25,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="clothing">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="stylesheet" href="style.css">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
@@ -40,6 +41,8 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <div id="flutter_host">
+  </div>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
@@ -48,7 +51,10 @@
           serviceWorkerVersion: serviceWorkerVersion,
         },
         onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
+          engineInitializer.initializeEngine({
+              // Pass a reference to "div#flutter_host" into the Flutter engine.
+              hostElement: document.querySelector("#flutter_host")
+            }).then(function(appRunner) {
             appRunner.runApp();
           });
         }
