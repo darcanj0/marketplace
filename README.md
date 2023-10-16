@@ -1,16 +1,28 @@
+
 # Marketplace
 
-A new Flutter project.
+A Marketplace app that can be easily adapted to work with several sellers APIs or be implemented in a single store.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## What I learned
 
-A few resources to get you started if this is your first Flutter project:
+- Global State Management (Providers, Consumers)
+- Custom scrolls
+- Advanced use of forms and its validations
+- UI/UX good practices
+- Improved user feedbacks
+- Consuming external APIs
+- Firebase Realtime Database
+- Firebase Authentication
+- Firebase Hosting
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Live demo
+
+https://marketplace-e37b2.firebaseapp.com/
+
+
+## Autores
+
+- [@darcanj0](https://www.github.com/darcanj0)
+
